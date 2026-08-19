@@ -8,951 +8,991 @@
 
     <title>Cart — TechHub</title>
 
-    <!-- Bootstrap -->
+    <link
+    rel="icon"
+    type="image/png"
+    href="{{ asset('css/techhub_TH_favicon.png') }}"
+>
+
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+        rel="stylesheet"
+    >
 
-    <!-- Bootstrap Icons -->
     <link
         rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
 
-    <!-- Fonts -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        rel="stylesheet">
-
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
 
-        /* =========================
-           THEME
-        ========================= */
-
-        :root{
-
-            --bg:#0A0C10;
-
-            --surface:#12151B;
-
-            --surface-2:#1A1E26;
-
-            --ice:#5FD3F3;
-
-            --ice-light:#A9E9FA;
-
-            --ice-dim:rgba(95,211,243,.28);
-
-            --ice-glow:rgba(95,211,243,.13);
-
-            --ivory:#E9ECF0;
-
-            --muted:#838B96;
-
-            --hairline:rgba(233,236,240,.08);
-
-            --font-display:'Space Grotesk',sans-serif;
-
-            --font-body:'Inter',sans-serif;
-
-            --font-mono:'JetBrains Mono',monospace;
-
+        * {
+            box-sizing: border-box;
         }
 
+        /* =========================================================
+   COUPON BOX
+========================================================= */
 
-        *{
-            box-sizing:border-box;
+.coupon-box {
+
+    padding: 16px;
+
+    border: 1px dashed rgba(37, 99, 235, .35);
+
+    border-radius: 13px;
+
+    background:
+        rgba(37, 99, 235, .045);
+
+}
+
+
+.coupon-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 11px;
+
+    color: var(--ivory);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+
+.coupon-title i {
+
+    color: var(--ice);
+
+    font-size: 17px;
+
+}
+
+
+.coupon-form {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+
+.coupon-form input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    background: rgba(255,255,255,.04);
+
+    border: 1px solid var(--hairline);
+
+    color: var(--ivory);
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+}
+
+
+.coupon-form input:focus {
+
+    border-color: var(--ice);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(39,229,255,.08);
+
+}
+
+
+.coupon-apply {
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 9px 15px;
+
+    background: var(--ice);
+
+    color: #0A0C10;
+
+    font-weight: 700;
+
+    font-size: 11px;
+
+}
+
+
+.coupon-help {
+
+    display: block;
+
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+.coupon-applied {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+}
+
+
+.coupon-check {
+
+    color: #22c55e;
+
+    margin-right: 5px;
+
+}
+
+
+.coupon-saved {
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-left: 5px;
+
+}
+
+
+.coupon-remove {
+
+    border: 1px solid rgba(220,38,38,.30);
+
+    background: rgba(220,38,38,.06);
+
+    color: #ef4444;
+
+    border-radius: 7px;
+
+    padding: 6px 9px;
+
+    font-size: 10px;
+
+}
+
+
+.coupon-discount {
+
+    color: #22c55e;
+
+    font-weight: 700;
+
+}
+
+        :root {
+            --blue: #2563eb;
+            --blue-dark: #1d4ed8;
+            --blue-soft: #eff6ff;
+            --text: #172033;
+            --muted: #667085;
+            --border: #e7ebf1;
+            --surface: #ffffff;
+            --background: #f6f8fb;
+            --danger: #dc2626;
+            --success: #16a34a;
         }
 
-
-        html{
-            scroll-behavior:smooth;
+        html {
+            scroll-behavior: smooth;
         }
 
-
-        body{
-
-            margin:0;
-
-            min-height:100vh;
-
-            display:flex;
-
-            flex-direction:column;
-
-            background:var(--bg);
-
-            color:var(--ivory);
-
-            font-family:var(--font-body);
-
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--background);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
         }
-
 
         h1,
         h2,
         h3,
         h4,
-        h5,
-        h6{
-
-            font-family:var(--font-display);
-
+        h5 {
+            font-family: 'Space Grotesk', sans-serif;
         }
-
 
         /* =========================
            NAVBAR
         ========================= */
 
-        .navbar{
-
-            background:rgba(10,12,16,.92);
-
-            backdrop-filter:blur(10px);
-
-            border-bottom:1px solid var(--hairline);
-
-            padding:16px 0;
-
-            animation:navDown .7s ease-out both;
-
+        .navbar {
+            background: rgba(255,255,255,.96);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-
-        .brand{
-
-            display:flex;
-
-            align-items:center;
-
-            gap:12px;
-
-            text-decoration:none;
-
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            text-decoration: none;
         }
 
-
-        .brand-mark{
-
-            width:40px;
-
-            height:40px;
-
-            border:1px solid var(--ice);
-
-            display:flex;
-
-            justify-content:center;
-
-            align-items:center;
-
-            color:var(--ice);
-
-            font-family:var(--font-display);
-
-            font-weight:700;
-
-            font-size:14px;
-
-            letter-spacing:1px;
-
-            transition:.3s;
-
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 16px rgba(37,99,235,.18);
         }
 
-
-        .brand:hover .brand-mark{
-
-            background:var(--ice);
-
-            color:#0A0C10;
-
+        .brand-name {
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 21px;
+            font-weight: 700;
         }
 
-
-        .brand-name{
-
-            font-family:var(--font-display);
-
-            font-size:21px;
-
-            font-weight:700;
-
-            color:var(--ivory);
-
+        .nav-link {
+            color: var(--muted) !important;
+            margin-left: 22px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: .2s ease;
         }
 
-
-        .nav-link{
-
-            color:var(--muted)!important;
-
-            margin-left:22px;
-
-            font-size:14px;
-
-            transition:.25s;
-
+        .nav-link:hover,
+        .cart-nav {
+            color: var(--blue) !important;
         }
 
-
-        .nav-link:hover{
-
-            color:var(--ice)!important;
-
+        .navbar-toggler {
+            border: 1px solid #dce2ea;
         }
 
-
-        .cart-nav{
-
-            color:var(--ice)!important;
-
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 3px rgba(37,99,235,.10);
         }
-
 
         /* =========================
-           PAGE
+           MAIN
         ========================= */
 
-        .cart-page{
-
-            flex:1;
-
-            position:relative;
-
-            padding:80px 0;
-
-            overflow:hidden;
-
+        .cart-page {
+            flex: 1;
+            padding: 65px 0 75px;
+            position: relative;
+            overflow: hidden;
         }
 
-
-        .cart-page::before{
-
-            content:"";
-
-            position:absolute;
-
-            inset:0;
-
-            background:
-
-                radial-gradient(
-                    ellipse at 85% 10%,
-                    var(--ice-glow),
-                    transparent 45%
-                ),
-
-                repeating-linear-gradient(
-                    0deg,
-                    var(--hairline) 0 1px,
-                    transparent 1px 64px
-                ),
-
-                repeating-linear-gradient(
-                    90deg,
-                    var(--hairline) 0 1px,
-                    transparent 1px 64px
-                );
-
-            opacity:.45;
-
-            pointer-events:none;
-
+        .cart-page::before {
+            content: "";
+            position: absolute;
+            width: 430px;
+            height: 430px;
+            right: -180px;
+            top: -180px;
+            background: #dbeafe;
+            border-radius: 50%;
+            opacity: .42;
+            filter: blur(5px);
+            pointer-events: none;
         }
 
-
-        .cart-page .container{
-
-            position:relative;
-
-            z-index:1;
-
+        .cart-page .container {
+            position: relative;
+            z-index: 1;
         }
-
 
         /* =========================
-           PAGE HEADER
+           ALERTS
         ========================= */
 
-        .eyebrow{
-
-            display:flex;
-
-            align-items:center;
-
-            gap:9px;
-
-            font-family:var(--font-mono);
-
-            font-size:12px;
-
-            letter-spacing:2.5px;
-
-            text-transform:uppercase;
-
-            color:var(--ice);
-
-            margin-bottom:12px;
-
-            animation:fadeUp .7s ease-out both;
-
+        .tech-alert {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 28px;
         }
 
-
-        .eyebrow .dot{
-
-            width:6px;
-
-            height:6px;
-
-            border-radius:50%;
-
-            background:var(--ice);
-
-            box-shadow:0 0 10px var(--ice);
-
+        .success-alert {
+            border-color: rgba(22,163,74,.25);
         }
 
-
-        .page-title{
-
-            font-size:clamp(2.3rem,5vw,4rem);
-
-            font-weight:700;
-
-            margin-bottom:10px;
-
-            animation:fadeUp .8s ease-out .1s both;
-
+        .success-alert i {
+            color: var(--success);
         }
 
-
-        .page-title span{
-
-            color:var(--ice);
-
-            text-shadow:0 0 25px var(--ice-glow);
-
+        .error-alert {
+            border-color: rgba(220,38,38,.25);
         }
 
-
-        .page-subtitle{
-
-            color:var(--muted);
-
-            margin-bottom:45px;
-
-            animation:fadeUp .8s ease-out .2s both;
-
+        .error-alert i {
+            color: var(--danger);
         }
-
 
         /* =========================
-           PRODUCT CARD
+           HEADER
         ========================= */
 
-        .cart-card{
-
-            background:var(--surface);
-
-            border:1px solid var(--hairline);
-
-            border-radius:4px;
-
-            padding:22px;
-
-            margin-bottom:16px;
-
-            transition:.3s;
-
-            animation:cardIn .7s ease-out both;
-
+        .eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
 
-
-        .cart-card:hover{
-
-            border-color:var(--ice-dim);
-
-            transform:translateY(-4px);
-
-            box-shadow:0 15px 35px rgba(0,0,0,.25);
-
+        .eyebrow .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--blue);
+            box-shadow: 0 0 10px rgba(37,99,235,.35);
         }
 
-
-        .product-image{
-
-            width:90px;
-
-            height:90px;
-
-            object-fit:cover;
-
-            border-radius:4px;
-
-            border:1px solid var(--hairline);
-
-            transition:.3s;
-
+        .page-title {
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            margin-bottom: 8px;
         }
 
-
-        .cart-card:hover .product-image{
-
-            border-color:var(--ice-dim);
-
-            transform:scale(1.04);
-
+        .page-title span {
+            color: var(--blue);
         }
 
-
-        .product-name{
-
-            color:var(--ivory);
-
-            font-weight:600;
-
-            margin-bottom:6px;
-
+        .page-subtitle {
+            color: var(--muted);
+            margin-bottom: 42px;
         }
 
+        /* =========================
+           CART CARD
+        ========================= */
 
-        .product-category{
-
-            color:var(--muted);
-
-            font-family:var(--font-mono);
-
-            font-size:11px;
-
-            text-transform:uppercase;
-
-            letter-spacing:1px;
-
+        .cart-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 16px;
+            transition: .25s ease;
         }
 
-
-        .product-price{
-
-            color:var(--ice);
-
-            font-family:var(--font-mono);
-
-            font-weight:600;
-
+        .cart-card:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(15,23,42,.07);
         }
 
+        .product-image {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            transition: .25s ease;
+        }
+
+        .cart-card:hover .product-image {
+            border-color: #bfdbfe;
+            transform: scale(1.03);
+        }
+
+        .product-name {
+            color: var(--text);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .product-category {
+            display: inline-block;
+            background: var(--blue-soft);
+            color: var(--blue);
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        .product-price {
+            color: var(--blue);
+            font-weight: 700;
+        }
+
+        .small-label {
+            color: #98a2b3;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
 
         /* =========================
            QUANTITY
         ========================= */
 
-        .quantity-form{
-
-            display:flex;
-
-            gap:8px;
-
-            align-items:center;
-
+        .quantity-form {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-
-        .quantity{
-
-            width:70px;
-
-            background:var(--surface-2);
-
-            border:1px solid var(--hairline);
-
-            color:var(--ivory);
-
-            border-radius:4px;
-
-            text-align:center;
-
+        .quantity {
+            width: 70px;
+            background: white;
+            border: 1px solid #dce2ea;
+            color: var(--text);
+            border-radius: 8px;
+            text-align: center;
         }
 
-
-        .quantity:focus{
-
-            background:var(--surface-2);
-
-            color:var(--ivory);
-
-            border-color:var(--ice);
-
-            box-shadow:0 0 0 3px var(--ice-glow);
-
+        .quantity:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(37,99,235,.10);
         }
 
-
-        .update-btn{
-
-            background:transparent;
-
-            border:1px solid var(--ice-dim);
-
-            color:var(--ice);
-
-            border-radius:4px;
-
-            padding:7px 10px;
-
-            transition:.25s;
-
+        .update-btn {
+            background: var(--blue-soft);
+            border: 1px solid #bfdbfe;
+            color: var(--blue);
+            border-radius: 8px;
+            padding: 7px 10px;
+            transition: .2s ease;
         }
 
-
-        .update-btn:hover{
-
-            background:var(--ice);
-
-            color:#0A0C10;
-
+        .update-btn:hover {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: white;
         }
-
 
         /* =========================
-           REMOVE BUTTON
+           REMOVE
         ========================= */
 
-        .remove-btn{
-
-            width:40px;
-
-            height:40px;
-
-            display:flex;
-
-            align-items:center;
-
-            justify-content:center;
-
-            background:transparent;
-
-            border:1px solid rgba(248,113,113,.25);
-
-            color:#f87171;
-
-            border-radius:4px;
-
-            transition:.25s;
-
+        .remove-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff7f7;
+            border: 1px solid rgba(220,38,38,.18);
+            color: var(--danger);
+            border-radius: 9px;
+            transition: .2s ease;
         }
 
-
-        .remove-btn:hover{
-
-            background:#f87171;
-
-            border-color:#f87171;
-
-            color:#0A0C10;
-
-            transform:scale(1.05);
-
+        .remove-btn:hover {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+            transform: scale(1.04);
         }
-
 
         /* =========================
            SUMMARY
         ========================= */
 
-        .total-card{
-
-            background:var(--surface);
-
-            border:1px solid var(--hairline);
-
-            border-radius:4px;
-
-            padding:30px;
-
-            position:sticky;
-
-            top:100px;
-
-            animation:cardIn .8s ease-out .25s both;
-
+        .total-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            position: sticky;
+            top: 100px;
+            box-shadow: 0 8px 25px rgba(15,23,42,.04);
         }
 
-
-        .summary-title{
-
-            font-size:22px;
-
-            margin-bottom:25px;
-
+        .summary-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 25px;
         }
 
-
-        .summary-label{
-
-            color:var(--muted);
-
+        .summary-label {
+            color: var(--muted);
         }
 
-
-        .summary-value{
-
-            color:var(--ivory);
-
-            font-family:var(--font-mono);
-
+        .summary-value {
+            color: var(--text);
+            font-weight: 700;
         }
 
-
-        .total-price{
-
-            color:var(--ice);
-
-            font-family:var(--font-display);
-
-            font-weight:700;
-
+        .status-ready {
+            color: var(--success);
+            font-weight: 700;
         }
 
+        .total-price {
+    color: var(--ice);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 28px !important;
+    white-space: nowrap;
+}
 
-        .checkout-btn{
-
-            width:100%;
-
-            background:var(--ice);
-
-            border:1px solid var(--ice);
-
-            color:#0A0C10;
-
-            padding:13px;
-
-            font-weight:600;
-
-            border-radius:4px;
-
-            transition:.25s;
-
+        /* PRICE SUMMARY FIX */
+        .summary-breakdown {
+            width: 100%;
+            margin-bottom: 24px;
         }
 
-
-        .checkout-btn:hover{
-
-            background:var(--ice-light);
-
-            border-color:var(--ice-light);
-
-            transform:translateY(-3px);
-
-            box-shadow:0 12px 25px rgba(0,0,0,.3);
-
+        .summary-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
         }
 
+        .summary-row .summary-label {
+            flex-shrink: 0;
+        }
+
+        .summary-row .summary-value,
+        .summary-row .coupon-discount {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .final-total-row {
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+
+        .final-total-row .summary-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 576px) {
+            .summary-row {
+                gap: 10px;
+            }
+
+            .total-price {
+                font-size: 24px !important;
+            }
+        }
+
+.summary-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.summary-row .summary-label {
+    flex-shrink: 0;
+}
+
+.summary-row .summary-value {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.discount-value {
+    color: var(--success);
+    font-family: var(--font-mono);
+    font-weight: 600;
+}
+
+.final-total-row {
+    padding-top: 15px;
+    border-top: 1px solid var(--hairline);
+}
+
+.final-total-row .summary-label {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+@media (max-width: 576px) {
+    .total-price {
+        font-size: 24px !important;
+    }
+
+    .summary-row {
+        gap: 10px;
+    }
+}
+
+
+        /* =========================
+           PAYMENT METHOD
+        ========================= */
+
+        .payment-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 16px;
+            margin-bottom: 22px;
+        }
+
+        .payment-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .payment-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .payment-option:hover {
+            border-color: #bfdbfe;
+            background: #f8fbff;
+        }
+
+        .payment-option input {
+            accent-color: var(--blue);
+        }
+
+        .payment-icon {
+            color: var(--blue);
+            font-size: 18px;
+        }
+
+        .payment-name {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .payment-description {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .online-payment-box {
+            display: none;
+            margin-top: 12px;
+            padding: 15px;
+            text-align: center;
+            background: white;
+            border: 1px dashed #bfdbfe;
+            border-radius: 10px;
+        }
+
+        .online-payment-box.active {
+            display: block;
+        }
+
+        .qr-placeholder {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 10px;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            background: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue);
+            font-size: 42px;
+        }
+
+        .payment-qr-image {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 12px;
+            padding: 8px;
+            background: white;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+        }
+
+        .admin-upi {
+            margin: 10px auto 7px;
+            padding: 9px 12px;
+            max-width: 280px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .admin-upi span {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-bottom: 3px;
+        }
+
+        .admin-upi strong {
+            color: var(--blue);
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .payment-note {
+            color: var(--muted);
+            font-size: 10px;
+            margin: 0;
+        }
+
+        .online-payment-box > .payment-option {
+            text-align: left;
+        }
+
+        .online-payment-box .form-control {
+            background: #fff;
+        }
+
+        .confirm-payment-btn {
+            margin-top: 12px;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 16px;
+            background: var(--blue);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .confirm-payment-btn:hover {
+            background: var(--blue-dark);
+        }
+
+        .payment-confirmed {
+            display: none;
+            color: var(--success);
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        .payment-confirmed.active {
+            display: block;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: var(--blue);
+            border: 1px solid var(--blue);
+            color: white;
+            padding: 13px;
+            font-weight: 700;
+            border-radius: 9px;
+            transition: .2s ease;
+        }
+
+        .checkout-btn:hover {
+            background: var(--blue-dark);
+            border-color: var(--blue-dark);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(37,99,235,.18);
+        }
+
+        .checkout-note {
+            color: #98a2b3;
+            font-size: 11px;
+            text-align: center;
+            margin-top: 12px;
+        }
 
         /* =========================
            EMPTY CART
         ========================= */
 
-        .empty-cart{
-
-            text-align:center;
-
-            padding:90px 20px;
-
-            animation:fadeUp .8s ease-out both;
-
+        .empty-cart {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            text-align: center;
+            padding: 85px 20px;
         }
 
-
-        .empty-icon{
-
-            width:90px;
-
-            height:90px;
-
-            margin:0 auto 25px;
-
-            border:1px solid var(--ice-dim);
-
-            border-radius:50%;
-
-            display:flex;
-
-            justify-content:center;
-
-            align-items:center;
-
-            color:var(--ice);
-
-            font-size:38px;
-
-            box-shadow:0 0 30px var(--ice-glow);
-
+        .empty-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 25px;
+            background: var(--blue-soft);
+            border: 1px solid #bfdbfe;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--blue);
+            font-size: 38px;
         }
 
-
-        .empty-cart h3{
-
-            font-size:28px;
-
+        .empty-cart h3 {
+            font-size: 28px;
+            font-weight: 700;
         }
 
-
-        .empty-cart p{
-
-            color:var(--muted);
-
+        .empty-cart p {
+            color: var(--muted);
         }
 
-
-        .continue-btn{
-
-            display:inline-block;
-
-            margin-top:15px;
-
-            background:var(--ice);
-
-            color:#0A0C10;
-
-            border:1px solid var(--ice);
-
-            padding:11px 25px;
-
-            border-radius:4px;
-
-            text-decoration:none;
-
-            font-weight:600;
-
-            transition:.25s;
-
+        .continue-btn {
+            display: inline-block;
+            margin-top: 15px;
+            background: var(--blue);
+            color: white;
+            border: 1px solid var(--blue);
+            padding: 11px 25px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: .2s ease;
         }
 
-
-        .continue-btn:hover{
-
-            background:var(--ice-light);
-
-            color:#0A0C10;
-
-            transform:translateY(-3px);
-
+        .continue-btn:hover {
+            background: var(--blue-dark);
+            color: white;
+            transform: translateY(-2px);
         }
-
 
         /* =========================
            FOOTER
         ========================= */
 
-        footer{
-
-            background:#080A0E;
-
-            border-top:1px solid var(--hairline);
-
-            color:var(--muted);
-
-            padding:30px 0;
-
+        footer {
+            background: white;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            padding: 30px 0;
         }
 
-
-        footer strong{
-
-            color:var(--ivory);
-
-            font-family:var(--font-display);
-
+        footer strong {
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
         }
 
+        @media(max-width: 991px) {
 
-        /* =========================
-           ANIMATIONS
-        ========================= */
-
-        @keyframes navDown{
-
-            from{
-
-                opacity:0;
-
-                transform:translateY(-20px);
-
+            .nav-links {
+                margin-top: 15px;
+                text-align: center;
             }
 
-            to{
+            .nav-link {
+                margin-left: 10px;
+            }
 
-                opacity:1;
-
-                transform:translateY(0);
-
+            .total-card {
+                position: static;
             }
 
         }
 
+        @media(max-width: 767px) {
 
-        @keyframes fadeUp{
-
-            from{
-
-                opacity:0;
-
-                transform:translateY(25px);
-
+            .cart-page {
+                padding: 50px 0;
             }
 
-            to{
-
-                opacity:1;
-
-                transform:translateY(0);
-
+            .cart-card {
+                padding: 18px;
             }
 
-        }
-
-
-        @keyframes cardIn{
-
-            from{
-
-                opacity:0;
-
-                transform:translateY(25px);
-
+            .product-image {
+                margin-bottom: 10px;
             }
 
-            to{
+            .quantity-form {
+                margin-top: 10px;
+            }
 
-                opacity:1;
+            .remove-btn {
+                margin-top: 10px;
+            }
 
-                transform:translateY(0);
-
+            .nav-link {
+                display: block !important;
+                padding: 8px 0;
+                margin-left: 0;
             }
 
         }
 
+        @media(max-width: 576px) {
 
-        /* Stagger product cards */
-
-        .cart-card:nth-child(1){
-            animation-delay:.05s;
-        }
-
-        .cart-card:nth-child(2){
-            animation-delay:.12s;
-        }
-
-        .cart-card:nth-child(3){
-            animation-delay:.19s;
-        }
-
-        .cart-card:nth-child(4){
-            animation-delay:.26s;
-        }
-
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media(max-width:991px){
-
-            .nav-links{
-
-                margin-top:15px;
-
-                text-align:center;
-
+            .brand-name {
+                font-size: 19px;
             }
 
-
-            .nav-link{
-
-                margin-left:10px;
-
-            }
-
-
-            .total-card{
-
-                position:static;
-
-            }
-
-        }
-
-
-        @media(max-width:767px){
-
-            .cart-page{
-
-                padding:55px 0;
-
-            }
-
-
-            .cart-card{
-
-                padding:18px;
-
-            }
-
-
-            .product-image{
-
-                margin-bottom:15px;
-
-            }
-
-
-            .quantity-form{
-
-                margin-top:15px;
-
-            }
-
-
-            .remove-btn{
-
-                margin-top:15px;
-
-            }
-
-        }
-
-
-        @media(max-width:576px){
-
-            .brand-name{
-
-                font-size:19px;
-
-            }
-
-
-            .page-title{
-
-                font-size:2.4rem;
-
-            }
-
-        }
-
-
-        @media(prefers-reduced-motion:reduce){
-
-            *{
-
-                animation:none!important;
-
-                transition:none!important;
-
+            .page-title {
+                font-size: 2.4rem;
             }
 
         }
@@ -964,63 +1004,74 @@
 
 <body>
 
+<!-- NAVBAR -->
 
-<!-- =========================
-     NAVBAR
-========================= -->
-
-<nav class="navbar">
+<nav class="navbar navbar-expand-lg">
 
     <div class="container">
 
-        <div class="d-flex justify-content-between align-items-center">
+        <a href="/" class="brand">
 
-            <a href="/" class="brand">
+            <span class="brand-mark">
+                TH
+            </span>
 
-                <span class="brand-mark">
-                    TH
-                </span>
+            <span class="brand-name">
+                TechHub
+            </span>
 
-                <span class="brand-name">
-                    TechHub
-                </span>
-
-            </a>
+        </a>
 
 
-            <div class="nav-links">
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#techHubNav"
+            aria-controls="techHubNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
 
-                <a class="nav-link d-inline"
-                   href="/">
+            <span class="navbar-toggler-icon"></span>
 
+        </button>
+
+
+        <div
+            class="collapse navbar-collapse"
+            id="techHubNav"
+        >
+
+            <div class="nav-links ms-auto">
+
+                <a
+                    class="nav-link d-inline-block"
+                    href="/"
+                >
                     Home
-
                 </a>
 
-
-                <a class="nav-link d-inline"
-                   href="/about">
-
+                <a
+                    class="nav-link d-inline-block"
+                    href="/about"
+                >
                     About
-
                 </a>
 
-
-                <a class="nav-link d-inline"
-                   href="/contact">
-
+                <a
+                    class="nav-link d-inline-block"
+                    href="/contact"
+                >
                     Contact
-
                 </a>
 
-
-                <a class="nav-link cart-nav d-inline"
-                   href="/cart">
-
+                <a
+                    class="nav-link cart-nav d-inline-block"
+                    href="/cart"
+                >
                     <i class="bi bi-cart3 me-1"></i>
-
                     Cart
-
                 </a>
 
             </div>
@@ -1032,13 +1083,60 @@
 </nav>
 
 
-<!-- =========================
-     CART PAGE
-========================= -->
+<!-- MAIN -->
 
 <main class="cart-page">
 
     <div class="container">
+
+        @if(session('success'))
+
+            <div
+                class="alert tech-alert success-alert alert-dismissible fade show"
+                role="alert"
+            >
+
+                <i class="bi bi-check-circle me-2"></i>
+
+                <strong>Success:</strong>
+
+                {{ session('success') }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                ></button>
+
+            </div>
+
+        @endif
+
+
+        @if(session('error'))
+
+            <div
+                class="alert tech-alert error-alert alert-dismissible fade show"
+                role="alert"
+            >
+
+                <i class="bi bi-exclamation-circle me-2"></i>
+
+                <strong>Error:</strong>
+
+                {{ session('error') }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                ></button>
+
+            </div>
+
+        @endif
 
 
         <div class="eyebrow">
@@ -1066,27 +1164,17 @@
 
         @if(count($cart) > 0)
 
-
             <div class="row g-4">
 
-
-                <!-- =================
-                     PRODUCTS
-                ================= -->
+                <!-- PRODUCTS -->
 
                 <div class="col-lg-8">
 
-
                     @foreach($cart as $id => $item)
-
 
                         <div class="cart-card">
 
-
                             <div class="row align-items-center g-3">
-
-
-                                <!-- IMAGE -->
 
                                 <div class="col-md-2 col-12 text-center">
 
@@ -1098,8 +1186,6 @@
 
                                 </div>
 
-
-                                <!-- NAME -->
 
                                 <div class="col-md-3 col-12">
 
@@ -1118,16 +1204,11 @@
                                 </div>
 
 
-                                <!-- PRICE -->
-
                                 <div class="col-md-2 col-6">
 
-                                    <span class="small"
-                                          style="color:var(--muted);">
-
+                                    <div class="small-label">
                                         PRICE
-
-                                    </span>
+                                    </div>
 
                                     <div class="product-price">
 
@@ -1138,17 +1219,11 @@
                                 </div>
 
 
-                                <!-- QUANTITY -->
-
                                 <div class="col-md-3 col-6">
 
-                                    <span class="small"
-                                          style="color:var(--muted);">
-
+                                    <div class="small-label">
                                         QUANTITY
-
-                                    </span>
-
+                                    </div>
 
                                     <form
                                         action="{{ url('/cart/update/' . $id) }}"
@@ -1158,15 +1233,14 @@
 
                                         @csrf
 
-
                                         <input
                                             type="number"
                                             name="quantity"
                                             value="{{ $item['quantity'] }}"
                                             min="1"
                                             class="form-control quantity"
+                                            required
                                         >
-
 
                                         <button
                                             type="submit"
@@ -1183,8 +1257,6 @@
                                 </div>
 
 
-                                <!-- REMOVE -->
-
                                 <div class="col-md-2 text-md-end text-start">
 
                                     <form
@@ -1193,7 +1265,6 @@
                                     >
 
                                         @csrf
-
 
                                         <button
                                             type="submit"
@@ -1209,47 +1280,34 @@
 
                                 </div>
 
-
                             </div>
 
                         </div>
 
-
                     @endforeach
-
 
                 </div>
 
 
-                <!-- =================
-                     SUMMARY
-                ================= -->
+                <!-- SUMMARY -->
 
                 <div class="col-lg-4">
 
-
                     <div class="total-card">
 
-
                         <h3 class="summary-title">
-
                             Cart Summary
-
                         </h3>
 
 
                         <div class="d-flex justify-content-between mb-3">
 
                             <span class="summary-label">
-
                                 Items
-
                             </span>
 
                             <strong class="summary-value">
-
                                 {{ count($cart) }}
-
                             </strong>
 
                         </div>
@@ -1258,70 +1316,449 @@
                         <div class="d-flex justify-content-between mb-3">
 
                             <span class="summary-label">
-
                                 Status
-
                             </span>
 
-                            <span style="color:var(--ice);">
-
+                            <span class="status-ready">
                                 Ready
-
                             </span>
 
                         </div>
 
+                        <!-- =========================
+     COUPON
+========================= -->
 
-                        <hr style="border-color:var(--hairline);">
+<div class="coupon-box mb-4">
+
+    <div class="coupon-title">
+
+        <i class="bi bi-ticket-perforated-fill"></i>
+
+        Have a coupon?
+
+    </div>
 
 
-                        <div class="d-flex justify-content-between align-items-center mb-4">
+    @if(session('coupon_code'))
 
-                            <span class="summary-label">
+        <div class="coupon-applied">
 
-                                Total
+            <div>
 
-                            </span>
+                <span class="coupon-check">
+                    <i class="bi bi-check-circle-fill"></i>
+                </span>
+
+                <strong>
+                    {{ session('coupon_code') }}
+                </strong>
+
+                <span class="coupon-saved">
+                    Coupon applied
+                </span>
+
+            </div>
 
 
-                            <span class="total-price fs-3">
+            <form
+                action="{{ url('/cart/remove-coupon') }}"
+                method="POST"
+            >
 
-                                ₹{{ number_format($total) }}
+                @csrf
 
-                            </span>
+                <button
+                    type="submit"
+                    class="coupon-remove"
+                >
+
+                    Remove
+
+                </button>
+
+            </form>
+
+        </div>
+
+    @else
+
+        <form
+            action="{{ url('/cart/apply-coupon') }}"
+            method="POST"
+            class="coupon-form"
+        >
+
+            @csrf
+
+            <input
+                type="text"
+                name="code"
+                class="form-control"
+                placeholder="Enter coupon code"
+                autocomplete="off"
+                required
+            >
+
+            <button
+                type="submit"
+                class="coupon-apply"
+            >
+
+                Apply
+
+            </button>
+
+        </form>
+
+        <small class="coupon-help">
+
+            Coupons are available on purchases of ₹10,000 or more.
+
+        </small>
+
+    @endif
+
+</div>
+
+
+                        <hr style="border-color:#e7ebf1;">
+
+
+                        <!-- PRICE SUMMARY -->
+
+                        <div class="summary-breakdown">
+
+                            <!-- SUBTOTAL -->
+                            <div class="summary-row">
+
+                                <span class="summary-label">
+                                    Subtotal
+                                </span>
+
+                                <span class="summary-value">
+                                    ₹{{ number_format($total, 2) }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- COUPON DISCOUNT -->
+                            @if($discount > 0)
+
+                                <div class="summary-row">
+
+                                    <span class="summary-label">
+                                        Coupon Discount
+                                    </span>
+
+                                    <span class="coupon-discount">
+                                        -₹{{ number_format($discount, 2) }}
+                                    </span>
+
+                                </div>
+
+                            @endif
+
+
+                            <!-- DIVIDER -->
+                            <hr style="border-color:#e7ebf1;">
+
+
+                            <!-- FINAL TOTAL -->
+                            <div class="summary-row final-total-row">
+
+                                <span class="summary-label">
+                                    Total
+                                </span>
+
+                                <span class="total-price">
+                                    ₹{{ number_format($finalTotal, 2) }}
+                                </span>
+
+                            </div>
 
                         </div>
 
 
-                        <button
-                            class="checkout-btn"
-                            type="button"
+                        <!-- PAYMENT METHOD -->
+
+                        <div class="payment-box">
+
+                            <div class="payment-title">
+                                <i class="bi bi-credit-card me-2"></i>
+                                Payment Method
+                            </div>
+
+                            <label class="payment-option">
+                                <input type="radio" name="payment_choice" value="online" checked>
+
+                                <i class="bi bi-credit-card payment-icon"></i>
+
+                                <span>
+                                    <span class="payment-name">Online Payment</span>
+                                    <span class="payment-description">Pay securely online</span>
+                                </span>
+                            </label>
+
+                            <div class="online-payment-box active" id="onlinePaymentBox">
+
+                                <!-- UPI / QR -->
+                                <label class="payment-option">
+                                    <input
+                                        type="radio"
+                                        name="online_payment_type"
+                                        value="upi"
+                                        checked
+                                    >
+
+                                    <i class="bi bi-qr-code payment-icon"></i>
+
+                                    <span>
+                                        <span class="payment-name">
+                                            UPI / Scan QR
+                                        </span>
+                                        <span class="payment-description">
+                                            Scan the QR code and pay using your UPI app
+                                        </span>
+                                    </span>
+                                </label>
+
+                                <div id="upiPaymentBox">
+
+                                    @if($paymentQr)
+
+                                        <img
+                                            src="data:image/svg+xml;base64,{{ $paymentQr }}"
+                                            alt="TechHub Payment QR"
+                                            class="payment-qr-image"
+                                        >
+
+                                    @elseif(isset($settings) && $settings->payment_qr)
+
+                                        {{-- Fallback to the static Cloudinary QR --}}
+                                        <img
+                                            src="{{ $settings->payment_qr }}"
+                                            alt="TechHub Payment QR"
+                                            class="payment-qr-image"
+                                        >
+
+                                    @else
+
+                                        <div class="qr-placeholder">
+                                            <i class="bi bi-qr-code"></i>
+                                        </div>
+
+                                    @endif
+
+                                    <strong>Scan & Pay</strong>
+
+                                    @if(isset($settings) && $settings->upi_id)
+
+                                        <p class="payment-note">
+                                            Scan the QR code or pay using the UPI ID above.
+                                        </p>
+
+                                    @else
+
+                                        <p class="payment-note">
+                                            Payment details are currently unavailable.
+                                        </p>
+
+                                    @endif
+
+                                </div>
+
+                                @if(isset($settings) && $settings->upi_id)
+
+    <!-- CUSTOMER UPI ID -->
+
+    <div class="customer-upi-input mt-3">
+
+        <label
+            for="customerUpiId"
+            class="form-label"
+        >
+            Your UPI ID
+        </label>
+
+        <input
+            type="text"
+            name="customer_upi_id"
+            id="customerUpiId"
+            class="form-control"
+            placeholder="example@upi"
+            autocomplete="off"
+        >
+
+        <small class="text-muted">
+            Enter the UPI ID you used to make the payment.
+        </small>
+
+    </div>
+
+@endif
+
+
+                                <!-- Credit / Debit Card -->
+                                <label class="payment-option">
+                                    <input
+                                        type="radio"
+                                        name="online_payment_type"
+                                        value="card"
+                                    >
+
+                                    <i class="bi bi-credit-card-2-front payment-icon"></i>
+
+                                    <span>
+                                        <span class="payment-name">
+                                            Credit / Debit Card
+                                        </span>
+                                        <span class="payment-description">
+                                            Pay securely using your card
+                                        </span>
+                                    </span>
+                                </label>
+
+                                <div
+                                    id="cardPaymentBox"
+                                    style="display: none; text-align: left; margin-top: 12px;"
+                                >
+
+                                    <div class="mb-2">
+                                        <label class="form-label fw-bold">
+                                            Card Number
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="1234 5678 9012 3456"
+                                            maxlength="19"
+                                            autocomplete="cc-number"
+                                        >
+                                    </div>
+
+                                    <div class="row g-2">
+
+                                        <div class="col-6">
+                                            <label class="form-label fw-bold">
+                                                Expiry
+                                            </label>
+
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                placeholder="MM/YY"
+                                                maxlength="5"
+                                                autocomplete="cc-exp"
+                                            >
+                                        </div>
+
+                                        <div class="col-6">
+                                            <label class="form-label fw-bold">
+                                                CVV
+                                            </label>
+
+                                            <input
+                                                type="password"
+                                                class="form-control"
+                                                placeholder="•••"
+                                                maxlength="4"
+                                                autocomplete="cc-csc"
+                                            >
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="confirm-payment-btn"
+                                    id="confirmPaymentBtn"
+                                >
+                                    Confirm Payment
+                                </button>
+
+                                <div
+                                    class="payment-confirmed"
+                                    id="paymentConfirmed"
+                                >
+                                    <i class="bi bi-check-circle-fill me-1"></i>
+                                    Payment confirmation received
+                                </div>
+
+                            </div>
+
+                            <label class="payment-option">
+                                <input type="radio" name="payment_choice" value="cod">
+
+                                <i class="bi bi-cash-coin payment-icon"></i>
+
+                                <span>
+                                    <span class="payment-name">Cash on Delivery</span>
+                                    <span class="payment-description">Pay when your order is delivered</span>
+                                </span>
+                            </label>
+
+                        </div>
+
+
+                        <form
+                            action="{{ url('/cart/checkout') }}"
+                            method="POST"
                         >
 
-                            Proceed to Checkout
+                            @csrf
 
-                            <i class="bi bi-arrow-right ms-2"></i>
+                            <input type="hidden"
+                                   name="payment_method"
+                                   id="selectedPaymentMethod"
+                                   value="online">
 
-                        </button>
+                            <input type="hidden"
+                                   name="payment_type"
+                                   id="selectedPaymentType"
+                                   value="upi">
 
+                            <input type="hidden"
+                                    name="customer_upi_id"
+                                    id="submittedCustomerUpiId"
+                                    value="">
+
+                            <button
+                                type="submit"
+                                class="btn checkout-btn"
+                            >
+
+                                <i class="bi bi-bag-check me-2"></i>
+
+                                Proceed to Checkout
+
+                            </button>
+
+                        </form>
+
+
+                        <div class="checkout-note">
+
+                            <i class="bi bi-shield-check me-1"></i>
+
+                            Secure order processing
+
+                        </div>
 
                     </div>
 
                 </div>
 
-
             </div>
-
 
         @else
 
-
-            <!-- =================
-                 EMPTY CART
-            ================= -->
-
             <div class="empty-cart">
-
 
                 <div class="empty-icon">
 
@@ -1329,20 +1766,13 @@
 
                 </div>
 
-
                 <h3>
-
                     Your Cart is Empty
-
                 </h3>
 
-
                 <p>
-
                     Looks like you haven't added anything yet.
-
                 </p>
-
 
                 <a
                     href="/"
@@ -1355,21 +1785,16 @@
 
                 </a>
 
-
             </div>
 
-
         @endif
-
 
     </div>
 
 </main>
 
 
-<!-- =========================
-     FOOTER
-========================= -->
+<!-- FOOTER -->
 
 <footer>
 
@@ -1382,9 +1807,7 @@
         <br>
 
         <small>
-
             © {{ date('Y') }} TechHub — ALL RIGHTS RESERVED
-
         </small>
 
     </div>
@@ -1392,7 +1815,252 @@
 </footer>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const choices = document.querySelectorAll(
+        'input[name="payment_choice"]'
+    );
+
+    const selectedPaymentMethod =
+        document.getElementById('selectedPaymentMethod');
+
+    const selectedPaymentType =
+        document.getElementById('selectedPaymentType');
+
+    const submittedCustomerUpiId =
+        document.getElementById('submittedCustomerUpiId');
+
+    const onlinePaymentBox =
+        document.getElementById('onlinePaymentBox');
+
+    const confirmPaymentBtn =
+        document.getElementById('confirmPaymentBtn');
+
+    const paymentConfirmed =
+        document.getElementById('paymentConfirmed');
+
+    const onlinePaymentTypes =
+        document.querySelectorAll(
+            'input[name="online_payment_type"]'
+        );
+
+    const upiPaymentBox =
+        document.getElementById('upiPaymentBox');
+
+    const customerUpiId =
+        document.getElementById('customerUpiId');
+
+    const cardPaymentBox =
+        document.getElementById('cardPaymentBox');
+
+
+    /* Sync visible UPI field with the checkout form */
+    if (customerUpiId && submittedCustomerUpiId) {
+        customerUpiId.addEventListener('input', function () {
+            submittedCustomerUpiId.value = this.value.trim();
+        });
+    }
+
+
+    /* Online payment type */
+    onlinePaymentTypes.forEach(function (type) {
+
+        type.addEventListener('change', function () {
+
+            selectedPaymentType.value = this.value;
+
+            if (this.value === 'upi') {
+
+                upiPaymentBox.style.display = 'block';
+                cardPaymentBox.style.display = 'none';
+
+                if (customerUpiId) {
+                    customerUpiId.required = true;
+                }
+
+            } else if (this.value === 'card') {
+
+                upiPaymentBox.style.display = 'none';
+                cardPaymentBox.style.display = 'block';
+
+                if (customerUpiId) {
+                    customerUpiId.required = false;
+                    customerUpiId.value = '';
+                }
+
+                if (submittedCustomerUpiId) {
+                    submittedCustomerUpiId.value = '';
+                }
+            }
+
+            paymentConfirmed.classList.remove('active');
+            confirmPaymentBtn.disabled = false;
+            confirmPaymentBtn.textContent = 'Confirm Payment';
+        });
+
+    });
+
+
+    /* Online / COD */
+    choices.forEach(function (choice) {
+
+        choice.addEventListener('change', function () {
+
+            selectedPaymentMethod.value = this.value;
+
+            if (this.value === 'online') {
+
+                onlinePaymentBox.classList.add('active');
+
+                const selectedOnline =
+                    document.querySelector(
+                        'input[name="online_payment_type"]:checked'
+                    );
+
+                selectedPaymentType.value =
+                    selectedOnline
+                        ? selectedOnline.value
+                        : 'upi';
+
+                if (selectedPaymentType.value === 'upi') {
+                    upiPaymentBox.style.display = 'block';
+                    cardPaymentBox.style.display = 'none';
+
+                    if (customerUpiId) {
+                        customerUpiId.required = true;
+                    }
+                }
+
+            } else {
+
+                onlinePaymentBox.classList.remove('active');
+                selectedPaymentType.value = 'cod';
+
+                paymentConfirmed.classList.remove('active');
+                confirmPaymentBtn.disabled = false;
+                confirmPaymentBtn.textContent = 'Confirm Payment';
+
+                if (customerUpiId) {
+                    customerUpiId.required = false;
+                    customerUpiId.value = '';
+                }
+
+                if (submittedCustomerUpiId) {
+                    submittedCustomerUpiId.value = '';
+                }
+            }
+        });
+
+    });
+
+
+    /* Initial state */
+    if (selectedPaymentMethod.value === 'online') {
+        onlinePaymentBox.classList.add('active');
+    }
+
+    if (selectedPaymentType.value === 'upi') {
+        upiPaymentBox.style.display = 'block';
+        cardPaymentBox.style.display = 'none';
+
+        if (customerUpiId) {
+            customerUpiId.required = true;
+        }
+    }
+
+
+    /* Confirm Payment */
+    if (confirmPaymentBtn) {
+
+        confirmPaymentBtn.addEventListener('click', function () {
+
+            if (
+                selectedPaymentMethod.value === 'online' &&
+                selectedPaymentType.value === 'upi'
+            ) {
+
+                if (
+                    !customerUpiId ||
+                    !customerUpiId.value.trim()
+                ) {
+
+                    alert(
+                        'Please enter your UPI ID before confirming payment.'
+                    );
+
+                    if (customerUpiId) {
+                        customerUpiId.focus();
+                    }
+
+                    return;
+                }
+
+                if (submittedCustomerUpiId) {
+                    submittedCustomerUpiId.value =
+                        customerUpiId.value.trim();
+                }
+            }
+
+            paymentConfirmed.classList.add('active');
+            this.textContent = 'Payment Confirmed';
+            this.disabled = true;
+        });
+
+    }
+
+
+    /* Checkout form */
+    const checkoutForm =
+        document.querySelector(
+            'form[action="{{ url('/cart/checkout') }}"]'
+        );
+
+    if (checkoutForm) {
+
+        checkoutForm.addEventListener('submit', function (event) {
+
+            const method =
+                selectedPaymentMethod.value;
+
+            const type =
+                selectedPaymentType.value;
+
+            if (method === 'online' && type === 'upi') {
+
+                const upi =
+                    customerUpiId
+                        ? customerUpiId.value.trim()
+                        : '';
+
+                if (!upi) {
+
+                    event.preventDefault();
+
+                    alert(
+                        'Please enter your UPI ID before proceeding to checkout.'
+                    );
+
+                    if (customerUpiId) {
+                        customerUpiId.focus();
+                    }
+
+                    return;
+                }
+
+                if (submittedCustomerUpiId) {
+                    submittedCustomerUpiId.value = upi;
+                }
+            }
+        });
+    }
+
+});
+</script>
 
 </body>
 

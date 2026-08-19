@@ -1,0 +1,159 @@
+/* =========================================================
+   TECHHUB GLOBAL THEME
+========================================================= */
+
+:root {
+    --theme-bg: #ffffff;
+    --theme-surface: #ffffff;
+    --theme-surface-2: #f7f9fc;
+    --theme-text: #111827;
+    --theme-muted: #667085;
+    --theme-border: rgba(15, 23, 42, 0.10);
+}
+
+/* DARK THEME */
+
+html.dark-mode {
+    --theme-bg: #080b12;
+    --theme-surface: #10151f;
+    --theme-surface-2: #151b26;
+    --theme-text: #f5f7fb;
+    --theme-muted: #a4adbd;
+    --theme-border: rgba(255, 255, 255, 0.10);
+}
+
+/* =========================================================
+   GLOBAL DARK MODE
+========================================================= */
+
+.theme-toggle {
+    border: 1px solid var(--line);
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--panel);
+    color: var(--text);
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.theme-toggle:hover {
+    color: var(--cyan);
+    border-color: rgba(37,99,235,.35);
+}
+
+/* DARK MODE */
+
+html.dark-mode body {
+    background: #080b12 !important;
+    color: #f5f7fb !important;
+}
+
+/* Main surfaces */
+
+html.dark-mode .navbar,
+html.dark-mode footer,
+html.dark-mode .about-content,
+html.dark-mode .story-card,
+html.dark-mode .feature-card,
+html.dark-mode .about-panel,
+html.dark-mode .cta-box,
+html.dark-mode .mini-stat,
+html.dark-mode .offcanvas {
+    background: #10151f !important;
+    color: #f5f7fb !important;
+}
+
+/* Sections */
+
+html.dark-mode .about-hero {
+    background: linear-gradient(
+        180deg,
+        #080b12 0%,
+        #10151f 100%
+    ) !important;
+}
+
+html.dark-mode .features-section {
+    background: #0d121a !important;
+}
+
+/* Text */
+
+html.dark-mode h1,
+html.dark-mode h2,
+html.dark-mode h3,
+html.dark-mode h4,
+html.dark-mode h5,
+html.dark-mode h6,
+html.dark-mode .brand-word,
+html.dark-mode .nav-link,
+html.dark-mode .category a,
+html.dark-mode .about-panel h3,
+html.dark-mode .story-card h2,
+html.dark-mode .feature-card h3,
+html.dark-mode .cta-box h2 {
+    color: #f5f7fb !important;
+}
+
+html.dark-mode p,
+html.dark-mode .hero-copy,
+html.dark-mode .section-subtitle,
+html.dark-mode .story-card p,
+html.dark-mode .feature-card p,
+html.dark-mode .cta-box p,
+html.dark-mode footer p {
+    color: #a4adbd !important;
+}
+
+/* Borders */
+
+html.dark-mode .story-card,
+html.dark-mode .feature-card,
+html.dark-mode .mini-stat,
+html.dark-mode .about-panel,
+html.dark-mode .cta-box,
+html.dark-mode .navbar,
+html.dark-mode footer,
+html.dark-mode .offcanvas {
+    border-color: rgba(255,255,255,.10) !important;
+}
+
+/* Buttons / icons */
+
+html.dark-mode .nav-icon,
+html.dark-mode .menu-btn,
+html.dark-mode .btn-outline-tech,
+html.dark-mode .theme-toggle {
+    background: #10151f !important;
+    color: #f5f7fb !important;
+    border-color: rgba(255,255,255,.10) !important;
+}
+
+/* Search */
+
+html.dark-mode .search-box {
+    background: #080b12 !important;
+}
+
+html.dark-mode .search-box input {
+    background: #151b26 !important;
+    color: #ffffff !important;
+}
+
+html.dark-mode .search-box input::placeholder {
+    color: #8f98a8 !important;
+}
+
+/* Moon / Sun */
+
+html.dark-mode .moon-icon {
+    display: none !important;
+}
+
+html.dark-mode .sun-icon {
+    display: inline !important;
+}

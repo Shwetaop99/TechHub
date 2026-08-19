@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Sign Up — TechHub</title>
+    <link
+    rel="icon"
+    type="image/png"
+    href="{{ asset('css/techhub_TH_favicon.png') }}"
+>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -29,25 +34,25 @@
 
         :root{
 
-            --bg:#0A0C10;
+            --bg:#FFFFFF;
 
-            --surface:#12151B;
+            --surface:#F7F8FA;
 
-            --surface-2:#1A1E26;
+            --surface-2:#F1F3F6;
 
-            --ice:#5FD3F3;
+            --ice:#2451FF;
 
-            --ice-light:#A9E9FA;
+            --ice-light:#1638C4;
 
-            --ice-dim:rgba(95,211,243,.28);
+            --ice-dim:rgba(36,81,255,.25);
 
-            --ice-glow:rgba(95,211,243,.13);
+            --ice-glow:rgba(36,81,255,.08);
 
-            --ivory:#E9ECF0;
+            --ivory:#12141A;
 
-            --muted:#838B96;
+            --muted:#767C87;
 
-            --hairline:rgba(233,236,240,.08);
+            --hairline:rgba(18,20,26,.10);
 
             --font-display:'Space Grotesk',sans-serif;
 
@@ -108,7 +113,7 @@
 
         .navbar{
 
-            background:rgba(10,12,16,.92);
+            background:#FFFFFF;
 
             backdrop-filter:blur(10px);
 
@@ -119,68 +124,42 @@
         }
 
 
-        .brand-mark{
+        .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
 
-            display:flex;
+.brand-monogram {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 6px;
+    background: #12141A;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-            align-items:center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+    line-height: 1;
+}
 
-            gap:12px;
+.brand-mark:hover .brand-monogram {
+    background: #2451FF;
+}
 
-            text-decoration:none;
-
-        }
-
-
-        .brand-monogram{
-
-            width:40px;
-
-            height:40px;
-
-            border:1px solid var(--ice);
-
-            display:flex;
-
-            align-items:center;
-
-            justify-content:center;
-
-            font-family:var(--font-display);
-
-            font-size:15px;
-
-            font-weight:700;
-
-            color:var(--ice);
-
-            letter-spacing:1px;
-
-            transition:.3s;
-
-        }
-
-
-        .brand-mark:hover .brand-monogram{
-
-            background:var(--ice);
-
-            color:#0A0C10;
-
-        }
-
-
-        .brand-word{
-
-            font-family:var(--font-display);
-
-            font-size:21px;
-
-            font-weight:700;
-
-            color:var(--ivory);
-
-        }
+.brand-word {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #12141A;
+    letter-spacing: .5px;
+}
 
 
         /* =========================
@@ -199,7 +178,7 @@
 
             font-size:14px;
 
-            border-radius:4px;
+            border-radius:6px;
 
             transition:.25s;
 
@@ -208,14 +187,21 @@
 
         .btn-home:hover{
 
-            border-color:var(--ice);
+            border-color:var(--cobalt);
 
-            color:var(--ice);
+            color:var(--cobalt);
 
             transform:translateY(-2px);
 
         }
 
+
+        .rule-ice {
+            width: 56px;
+            height: 2px;
+            background: var(--cobalt);
+            margin: 16px auto 22px;
+        }
 
         /* =========================
            SIGNUP AREA
@@ -252,18 +238,17 @@
 
             background:
 
+                
                 radial-gradient(
                     ellipse at 85% 20%,
-                    var(--ice-glow) 0%,
+                    var(--cobalt-tint) 0%,
                     transparent 45%
                 ),
-
                 repeating-linear-gradient(
                     0deg,
                     var(--hairline) 0 1px,
                     transparent 1px 64px
                 ),
-
                 repeating-linear-gradient(
                     90deg,
                     var(--hairline) 0 1px,
@@ -308,7 +293,7 @@
 
             text-transform:uppercase;
 
-            color:var(--ice);
+            color:var(--cobalt);
 
             font-weight:500;
 
@@ -325,9 +310,9 @@
 
             border-radius:50%;
 
-            background:var(--ice);
+            background:var(--cobalt);
 
-            box-shadow:0 0 8px var(--ice);
+            box-shadow:none;
 
             animation:pulse 2s ease-in-out infinite;
 
@@ -367,9 +352,9 @@
 
         .signup-title span{
 
-            color:var(--ice);
+            color:var(--cobalt);
 
-            text-shadow:0 0 24px var(--ice-glow);
+            text-shadow:0 0 24px var(--cobalt-tint);
 
         }
 
@@ -405,11 +390,11 @@
 
             border:1px solid var(--hairline);
 
-            border-radius:4px;
+            border-radius:6px;
 
             padding:44px;
 
-            box-shadow:0 20px 50px rgba(0,0,0,.35);
+            box-shadow:0 20px 50px rgba(18,20,26,.08);
 
             animation:cardAppear .8s cubic-bezier(.19,1,.22,1) .3s both;
 
@@ -424,7 +409,7 @@
 
             margin:0 auto 22px;
 
-            border:1px solid var(--ice-dim);
+            border:1px solid var(--cobalt-border);
 
             border-radius:50%;
 
@@ -434,11 +419,11 @@
 
             justify-content:center;
 
-            color:var(--ice);
+            color:var(--cobalt);
 
             font-size:27px;
 
-            box-shadow:0 0 25px var(--ice-glow);
+            box-shadow:0 0 25px var(--cobalt-tint);
 
             animation:floatIcon 3s ease-in-out 1s infinite;
 
@@ -490,7 +475,7 @@
 
             color:var(--ivory);
 
-            border-radius:4px;
+            border-radius:6px;
 
             padding:12px 14px;
 
@@ -512,9 +497,9 @@
 
             color:var(--ivory);
 
-            border-color:var(--ice);
+            border-color:var(--cobalt);
 
-            box-shadow:0 0 0 3px var(--ice-glow);
+            box-shadow:0 0 0 3px var(--cobalt-tint);
 
             transform:translateY(-2px);
 
@@ -529,11 +514,11 @@
 
             width:100%;
 
-            background:var(--ice);
+            background:var(--cobalt);
 
-            border:1px solid var(--ice);
+            border:1px solid var(--cobalt);
 
-            color:#0A0C10;
+            color:black;
 
             font-weight:600;
 
@@ -543,7 +528,7 @@
 
             padding:13px;
 
-            border-radius:4px;
+            border-radius:6px;
 
             transition:.25s;
 
@@ -552,15 +537,15 @@
 
         .btn-signup:hover{
 
-            background:var(--ice-light);
+            background:var(--cobalt-dark);
 
-            border-color:var(--ice-light);
+            border-color:var(--cobalt-dark);
 
-            color:#0A0C10;
+            color:blue;
 
             transform:translateY(-3px);
 
-            box-shadow:0 12px 25px rgba(0,0,0,.35);
+            box-shadow:0 12px 25px rgba(18,20,26,.08);
 
         }
 
@@ -593,7 +578,7 @@
 
         .login-line a{
 
-            color:var(--ice);
+            color:var(--cobalt);
 
             text-decoration:none;
 
@@ -608,9 +593,9 @@
 
         .login-line a:hover{
 
-            color:var(--ice-light);
+            color:var(--cobalt-dark);
 
-            border-bottom-color:var(--ice);
+            border-bottom-color:var(--cobalt);
 
         }
 
@@ -806,6 +791,8 @@
 
         </h1>
 
+
+        <div class="rule-ice"></div>
 
         <p class="signup-subtitle">
 
