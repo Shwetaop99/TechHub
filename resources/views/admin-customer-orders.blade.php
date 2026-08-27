@@ -146,6 +146,43 @@
             font-weight: 700;
         }
 
+        .status-control {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .status-select {
+            min-width: 145px;
+            padding: 8px 32px 8px 11px;
+
+            border: 1px solid #dbe3ef;
+            border-radius: 10px;
+
+            background: #f8fafc;
+            color: #344054;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            outline: none;
+            cursor: pointer;
+
+            transition: border-color .2s ease,
+                        box-shadow .2s ease,
+                        background-color .2s ease;
+        }
+
+        .status-select:hover {
+            background: #ffffff;
+            border-color: #b8c4d6;
+        }
+
+        .status-select:focus {
+            background: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .08);
+        }
+
         .payment-badge {
             background: #eff6ff;
             color: #2563eb;
@@ -211,6 +248,14 @@
 
             .product-box {
                 align-items: flex-start;
+            }
+
+            .status-control {
+                justify-content: flex-start;
+            }
+
+            .status-select {
+                min-width: 160px;
             }
 
         }
@@ -304,15 +349,67 @@
                     </div>
 
 
-                    <div>
+                    <div class="status-control">
 
-                        <span class="status-badge">
+                        <form
+    action="{{ session('normal_admin_logged_in')
+        ? url('/admin-user/orders/' . $order->id . '/status')
+        : url('/admin/orders/' . $order->id . '/status') }}"
+    method="POST"
+>
+    @csrf
 
-                            <i class="bi bi-truck"></i>
+    <select
+        name="status"
+        class="status-select"
+        onchange="this.form.submit()"
+    >
 
-                            {{ ucfirst($order->status ?? 'pending') }}
+        <option
+            value="pending"
+            {{ $order->status === 'pending' ? 'selected' : '' }}
+        >
+            Pending
+        </option>
 
-                        </span>
+        <option
+            value="processing"
+            {{ $order->status === 'processing' ? 'selected' : '' }}
+        >
+            Processing
+        </option>
+
+        <option
+            value="shipped"
+            {{ $order->status === 'shipped' ? 'selected' : '' }}
+        >
+            Shipped
+        </option>
+
+        <option
+            value="out_for_delivery"
+            {{ $order->status === 'out_for_delivery' ? 'selected' : '' }}
+        >
+            Out for Delivery
+        </option>
+
+        <option
+            value="delivered"
+            {{ $order->status === 'delivered' ? 'selected' : '' }}
+        >
+            Delivered
+        </option>
+
+        <option
+            value="cancelled"
+            {{ $order->status === 'cancelled' ? 'selected' : '' }}
+        >
+            Cancelled
+        </option>
+
+    </select>
+
+</form>
 
                     </div>
 

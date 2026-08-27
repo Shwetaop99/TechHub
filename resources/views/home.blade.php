@@ -1919,7 +1919,10 @@ body.dark-mode .order-notification-close {
    ORDER NOTIFICATIONS
 ========================================================= */
 
-let knownNotificationIds = [];
+let knownNotificationIds =
+    JSON.parse(
+        localStorage.getItem('techhub-known-notifications') || '[]'
+    );
 
 let notificationAudioContext = null;
 
@@ -2320,9 +2323,12 @@ async function checkOrderNotifications() {
                     )
                 ) {
 
-                    knownNotificationIds.push(
-                        notification.id
-                    );
+                    knownNotificationIds.push(notification.id);
+
+localStorage.setItem(
+    'techhub-known-notifications',
+    JSON.stringify(knownNotificationIds)
+);
 
 
                     showOrderNotification(
@@ -2361,6 +2367,6 @@ setInterval(
     5000
 );
 </script>
-
+@include('components.support-notification')
 </body>
 </html>

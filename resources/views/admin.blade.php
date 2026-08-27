@@ -21,911 +21,605 @@
           rel="stylesheet">
 
     <style>
-        .status-notification-bell {
-    background: rgba(37, 99, 235, .10);
-    color: #2563eb;
-}
-
-        /* =========================================================
-   ORDERS SIDEBAR LINK
-========================================================= */
-
-.sidebar .orders-card {
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    color: #667085;
-    text-decoration: none !important;
-
-    padding: 12px 14px;
-    margin-bottom: 7px;
-
-    border: 1px solid transparent;
-    border-radius: 11px;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    transition: .2s ease;
-}
-
-.sidebar .orders-card:hover {
-    color: var(--blue);
-    background: rgba(37,99,235,.055);
-    border-color: rgba(37,99,235,.13);
-    transform: translateX(3px);
-}
-
-.sidebar .orders-card .admin-card-icon {
-    width: 20px;
-    height: 20px;
-
-    flex: 0 0 20px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin: 0;
-    padding: 0;
-
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-
-    color: #98a2b3;
-    font-size: 17px;
-}
-
-.sidebar .orders-card:hover .admin-card-icon {
-    background: transparent;
-    color: var(--blue);
-}
-
-.sidebar .orders-card .admin-card-content {
-    display: block;
-    min-width: 0;
-}
-
-.sidebar .orders-card .admin-card-content h5 {
-    margin: 0;
-
-    color: inherit;
-
-    font-family: var(--body);
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1.3;
-
-    text-decoration: none !important;
-}
-
-.sidebar .orders-card .admin-card-content p {
-    margin: 0;
-
-    color: #667085;
-
-    font-family: var(--body);
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 1.3;
-
-    text-decoration: none !important;
-}
-
-.sidebar .orders-card:hover .admin-card-content h5 {
-    color: var(--blue);
-}
-
-/* New-order count */
-.sidebar .orders-card .order-notification {
-    position: absolute;
-
-    top: 50%;
-    right: 12px;
-
-    transform: translateY(-50%);
-
-    min-width: 30px;
-    height: 30px;
-
-    padding: 0 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50px;
-
-    background: #ef4444;
-    color: #ffffff !important;
-
-    font-family: var(--body);
-    font-size: 12px;
-    font-weight: 800;
-    line-height: 1;
-
-    box-shadow: 0 0 0 4px rgba(239,68,68,.12);
-
-    animation: notificationPulse 1.5s infinite;
-}
-
-@keyframes notificationPulse {
-    0%, 100% {
-        transform: translateY(-50%) scale(1);
-    }
-
-    50% {
-        transform: translateY(-50%) scale(1.06);
-    }
-}
-
-:root {
-            --bg: #f7f9fc;
-            --white: #ffffff;
-            --surface: #ffffff;
-            --surface-2: #f8fafc;
-
-            --text: #111827;
-            --muted: #667085;
-
-            --blue: #2563eb;
-            --indigo: #4f46e5;
-            --purple: #7c3aed;
-
-            --green: #16a34a;
-            --red: #dc2626;
-            --orange: #ea580c;
-
-            --line: rgba(15,23,42,.10);
-
-            --display: 'Space Grotesk', sans-serif;
-            --body: 'Inter', sans-serif;
-            --mono: 'JetBrains Mono', monospace;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
 
         body {
             margin: 0;
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at 88% 5%, rgba(37,99,235,.07), transparent 28%),
-                radial-gradient(circle at 10% 90%, rgba(124,58,237,.045), transparent 30%),
-                var(--bg);
-            color: var(--text);
-            font-family: var(--body);
+            background: #f5f7fb;
+            color: #1f2937;
+            font-family: Arial, sans-serif;
         }
-
-        h1,h2,h3,h4,h5,h6 {
-            font-family: var(--display);
-            font-weight: 700;
-        }
-
-        a {
-            color: inherit;
-        }
-
-        /* =========================================================
-           TOP LINE
-        ========================================================= */
-
-        .top-line {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            z-index: 2000;
-            background: linear-gradient(
-                90deg,
-                var(--blue),
-                var(--indigo),
-                var(--purple),
-                var(--blue)
-            );
-            background-size: 200% 100%;
-            animation: flow 6s linear infinite;
-        }
-
-        @keyframes flow {
-            to {
-                background-position: 200% 0;
-            }
-        }
-
-        /* =========================================================
-           LAYOUT
-        ========================================================= */
 
         .admin-layout {
             min-height: 100vh;
-            display: flex;
         }
 
-        /* =========================================================
-           SIDEBAR
-        ========================================================= */
+        /* Sidebar */
 
         .sidebar {
-            width: 265px;
-            min-height: 100vh;
-
+            width: 250px;
+            height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
-            bottom: 0;
-
-            z-index: 100;
-
-            padding: 28px 20px;
-
-            background: rgba(255,255,255,.94);
-            border-right: 1px solid var(--line);
-
-            box-shadow: 8px 0 35px rgba(15,23,42,.035);
-
-            backdrop-filter: blur(18px);
-
-            animation: sidebarIn .65s ease-out both;
+            padding: 25px 18px;
+            background: white;
+            border-right: 1px solid #e5e7eb;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
             margin-bottom: 8px;
         }
 
-        .brand:focus,
-.brand:focus-visible,
-.brand:active {
-    outline: none !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
         .brand-mark {
-            width: 42px;
-            height: 42px;
-
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            border-radius: 12px;
-
-            background: linear-gradient(135deg, var(--blue), var(--indigo));
-            color: #ffffff;
-
-            font-family: var(--display);
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 1px;
-
-            box-shadow: 0 8px 22px rgba(37,99,235,.16);
-
-            transition: .25s ease;
-        }
-
-        .brand:hover .brand-mark {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(37,99,235,.22);
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-weight: bold;
         }
 
         .brand-name {
-            font-family: var(--display);
-            color: var(--text);
+            color: #111827;
             font-size: 21px;
-            font-weight: 700;
+            font-weight: bold;
         }
 
         .brand-name span {
-            color: var(--blue);
+            color: #2563eb;
         }
 
         .admin-label {
-            font-family: var(--mono);
-            font-size: 9px;
-            letter-spacing: 2px;
+            margin: 10px 0 25px 50px;
+            color: #2563eb;
+            font-size: 10px;
+            font-weight: bold;
             text-transform: uppercase;
-            color: var(--blue);
-            margin: 12px 0 25px 54px;
-        }
-
-        .sidebar hr {
-            border-color: var(--line);
-            margin-bottom: 22px;
-            opacity: 1;
         }
 
         .sidebar-section {
-            font-family: var(--mono);
-            font-size: 9px;
-            letter-spacing: 1.6px;
+            margin: 20px 0 10px 10px;
+            color: #9ca3af;
+            font-size: 10px;
+            font-weight: bold;
             text-transform: uppercase;
-            color: #98a2b3;
-            margin: 0 0 10px 12px;
         }
 
         .sidebar-link {
             display: flex;
             align-items: center;
             gap: 12px;
-
+            padding: 11px 13px;
+            margin-bottom: 6px;
+            border-radius: 8px;
             color: #667085;
             text-decoration: none;
-
-            padding: 12px 14px;
-
-            border: 1px solid transparent;
-            border-radius: 11px;
-
-            margin-bottom: 7px;
-
             font-size: 13px;
-            font-weight: 600;
-
-            transition: .2s ease;
         }
 
         .sidebar-link i {
             width: 20px;
             font-size: 17px;
-            color: #98a2b3;
         }
 
-        .sidebar-link:hover {
-            color: var(--blue);
-            background: rgba(37,99,235,.055);
-            border-color: rgba(37,99,235,.13);
-            transform: translateX(3px);
-        }
-
-        .sidebar-link:hover i {
-            color: var(--blue);
-        }
-
+        .sidebar-link:hover,
         .sidebar-link.active {
-            color: var(--blue);
-            background: linear-gradient(
-                90deg,
-                rgba(37,99,235,.09),
-                rgba(79,70,229,.045)
-            );
-            border-color: rgba(37,99,235,.16);
+            background: #eff6ff;
+            color: #2563eb;
         }
 
-        .sidebar-link.active i {
-            color: var(--blue);
+        .orders-card {
+            position: relative;
+        }
+
+        .order-notification {
+            margin-left: auto;
+            min-width: 25px;
+            padding: 5px 8px;
+            border-radius: 20px;
+            background: #ef4444;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
         }
 
         .sidebar-bottom {
             position: absolute;
-            left: 20px;
-            right: 20px;
-            bottom: 24px;
-
-            padding-top: 18px;
-            border-top: 1px solid var(--line);
-
-            color: #98a2b3;
-            font: 9px var(--mono);
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            bottom: 20px;
+            color: #9ca3af;
+            font-size: 10px;
         }
 
         .sidebar-bottom i {
-            color: var(--green);
+            color: #16a34a;
         }
 
-        /* =========================================================
-           MAIN
-        ========================================================= */
+        /* Main content */
 
         .main-content {
-            margin-left: 265px;
-            width: calc(100% - 265px);
+            margin-left: 250px;
             min-height: 100vh;
-
-            padding: 45px;
-
-            position: relative;
-            overflow: hidden;
-        }
-
-        .main-content::before {
-            content: "";
-
-            position: fixed;
-            inset: 0 0 0 265px;
-
-            background:
-                linear-gradient(
-                    rgba(15,23,42,.025) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(15,23,42,.025) 1px,
-                    transparent 1px
-                );
-
-            background-size: 64px 64px;
-
-            mask-image: linear-gradient(
-                to bottom,
-                black,
-                transparent 78%
-            );
-
-            pointer-events: none;
-        }
-
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-            max-width: 1500px;
-            margin: 0 auto;
-        }
-
-        /* =========================================================
-           HEADER
-        ========================================================= */
-
-        .eyebrow {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-
-            font-family: var(--mono);
-            font-size: 10px;
-            letter-spacing: 2.2px;
-            text-transform: uppercase;
-
-            color: var(--blue);
-            margin-bottom: 10px;
-        }
-
-        .eyebrow .dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-
-            background: var(--green);
-            box-shadow: 0 0 10px rgba(22,163,74,.35);
-
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%,100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: .45;
-            }
+            padding: 40px;
         }
 
         .page-title {
-            font-size: clamp(2rem, 4vw, 3rem);
             margin-bottom: 5px;
-            letter-spacing: -1.5px;
-
-            animation: fadeUp .65s ease-out both;
+            font-size: 36px;
+            font-weight: bold;
         }
 
         .page-title span {
-            background: linear-gradient(
-                90deg,
-                var(--blue),
-                var(--indigo),
-                var(--purple)
-            );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: #2563eb;
         }
 
         .page-subtitle {
-            color: var(--muted);
+            color: #667085;
             font-size: 14px;
-            animation: fadeUp .65s ease-out .08s both;
+        }
+
+        .eyebrow {
+            margin-bottom: 8px;
+            color: #2563eb;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .eyebrow .dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            margin-right: 5px;
+            border-radius: 50%;
+            background: #16a34a;
         }
 
         .view-btn {
-            display: inline-flex;
-            align-items: center;
-
-            background: #ffffff;
-            color: #344054;
-
-            border: 1px solid var(--line);
-            border-radius: 11px;
-
-            padding: 10px 18px;
-
+            padding: 9px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            color: #374151;
             font-size: 13px;
-            font-weight: 600;
-
-            transition: .2s ease;
         }
 
         .view-btn:hover {
-            border-color: rgba(37,99,235,.30);
-            color: var(--blue);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(15,23,42,.06);
+            background: #2563eb;
+            color: white;
         }
 
-        /* =========================================================
-           STAT CARDS
-        ========================================================= */
+        /* Statistics */
 
         .stat-card {
-            position: relative;
-            overflow: hidden;
-
-            background: rgba(255,255,255,.94);
-
-            border: 1px solid var(--line);
-            border-radius: 18px;
-
-            color: var(--text);
-
-            padding: 25px;
             height: 100%;
-
-            box-shadow: 0 8px 30px rgba(15,23,42,.045);
-
-            transition: .25s ease;
-
-            animation: cardIn .65s ease-out both;
-        }
-
-        .stat-card::after {
-            content: "";
-
-            position: absolute;
-            width: 120px;
-            height: 120px;
-
-            right: -55px;
-            top: -55px;
-
-            border-radius: 50%;
-
-            background: rgba(37,99,235,.06);
+            padding: 22px;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,.05);
         }
 
         .stat-card:hover {
-            border-color: rgba(37,99,235,.22);
-            transform: translateY(-5px);
-            box-shadow: 0 18px 42px rgba(15,23,42,.09);
+            border-color: #93c5fd;
+            transform: translateY(-2px);
         }
 
         .stat-icon {
-            position: relative;
-            z-index: 1;
-
-            width: 48px;
-            height: 48px;
-
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-
-            border: 1px solid rgba(37,99,235,.16);
-            background: rgba(37,99,235,.065);
-
-            color: var(--blue);
-
-            border-radius: 13px;
-
-            font-size: 21px;
-            margin-bottom: 20px;
-
-            transition: .25s ease;
-        }
-
-        .stat-card:hover .stat-icon {
-            background: linear-gradient(135deg, var(--blue), var(--indigo));
-            border-color: transparent;
-            color: #ffffff;
-            transform: scale(1.06);
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 20px;
         }
 
         .stat-label {
-            color: var(--muted);
-
-            font-family: var(--mono);
-            font-size: 9px;
-            letter-spacing: 1.4px;
+            color: #667085;
+            font-size: 11px;
             text-transform: uppercase;
         }
 
         .stat-number {
-            color: var(--text);
-            font-size: 30px;
             margin-top: 5px;
             margin-bottom: 0;
+            font-size: 28px;
+            font-weight: bold;
         }
 
-        /* =========================================================
-           PRODUCT PANEL
-        ========================================================= */
+        .visitor-stat-card {
+            display: block;
+            color: inherit;
+        }
+
+        .visitor-stat-icon {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .visitor-stat-link {
+            margin-top: 8px;
+            color: #16a34a;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* Products */
 
         .product-panel {
-            background: rgba(255,255,255,.96);
-
-            border: 1px solid var(--line);
-            border-radius: 18px;
-
             overflow: hidden;
-
-            box-shadow: 0 10px 35px rgba(15,23,42,.045);
-
-            animation: fadeUp .8s ease-out .30s both;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,.05);
         }
 
         .product-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--line);
+            padding: 22px;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .product-header h4 {
             margin: 0;
-            font-size: 21px;
+            font-weight: bold;
         }
 
         .add-btn {
-            display: inline-flex;
-            align-items: center;
-
-            background: linear-gradient(
-                135deg,
-                var(--blue),
-                var(--indigo)
-            );
-
-            color: #ffffff;
-
+            padding: 9px 15px;
             border: 0;
-            border-radius: 11px;
-
-            padding: 10px 17px;
-
-            font-weight: 700;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
             font-size: 12px;
-
-            box-shadow: 0 8px 22px rgba(37,99,235,.15);
-
-            transition: .2s ease;
+            font-weight: bold;
         }
 
         .add-btn:hover {
-            color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(37,99,235,.22);
-        }
-
-        .table {
-            margin: 0;
-            color: var(--text);
+            background: #1d4ed8;
+            color: white;
         }
 
         .table thead th {
-            background: #f8fafc;
-
+            padding: 14px;
+            background: #f9fafb;
             color: #667085;
-
-            border-bottom: 1px solid var(--line);
-            border-top: none;
-
-            padding: 15px 18px;
-
-            font-family: var(--mono);
-            font-size: 9px;
-            letter-spacing: 1.2px;
+            font-size: 10px;
             text-transform: uppercase;
-
-            white-space: nowrap;
         }
 
         .table tbody td {
-            background: #ffffff;
-
-            color: var(--text);
-
-            border-color: var(--line);
-
-            padding: 17px 18px;
+            padding: 15px;
             vertical-align: middle;
         }
 
-        .table tbody tr {
-            transition: .2s ease;
-        }
-
-        .table tbody tr:hover td {
-            background: #f8fbff;
-        }
-
         .product-name {
-            font-weight: 700;
-            color: var(--text);
+            font-weight: bold;
         }
 
         .category-text {
-            color: var(--muted);
-
-            font-family: var(--mono);
-            font-size: 10px;
-        }
-
-        .price-text {
-            color: var(--blue);
-
-            font-family: var(--mono);
-            font-weight: 700;
+            color: #667085;
             font-size: 12px;
         }
 
+        .price-text {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
         .stock-text {
-            color: var(--text);
             font-weight: 600;
         }
 
         .sold-text {
-            color: var(--muted);
+            color: #667085;
         }
 
         .remove-btn {
-            background: rgba(220,38,38,.045);
-
-            color: var(--red);
-
-            border: 1px solid rgba(220,38,38,.16);
-            border-radius: 9px;
-
-            padding: 6px 12px;
-
+            padding: 6px 10px;
+            border: 1px solid #fecaca;
+            border-radius: 7px;
+            background: #fef2f2;
+            color: #dc2626;
             font-size: 11px;
-            font-weight: 600;
-
-            transition: .2s ease;
         }
 
         .remove-btn:hover {
-            background: var(--red);
-            border-color: var(--red);
-            color: #ffffff;
-            transform: translateY(-1px);
+            background: #dc2626;
+            color: white;
         }
 
         .empty-state {
-            padding: 55px 20px;
+            padding: 45px 20px;
+            color: #667085;
             text-align: center;
-            color: var(--muted);
         }
 
         .empty-state i {
             display: block;
-            font-size: 35px;
-            color: #98a2b3;
             margin-bottom: 10px;
+            color: #9ca3af;
+            font-size: 35px;
+        }
+
+        /* Popups */
+
+        .new-order-popup {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            z-index: 9999;
+            width: 350px;
+            padding: 18px 20px;
+            border: 1px solid #dbeafe;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 15px 40px rgba(0,0,0,.15);
+            opacity: 0;
+            transform: translateY(120px);
+            pointer-events: none;
+            transition: .3s;
         }
 
         /* =========================================================
-           VISITOR STAT CARD
-        ========================================================= */
+   ADMIN CUSTOMER MESSAGE POPUP
+========================================================= */
 
-        .visitor-stat-card {
+.admin-support-notification {
+
+    position: fixed;
+
+    right: 25px;
+    bottom: 25px;
+
+    z-index: 10000;
+
+    width: 350px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 18px 20px;
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 15px;
+
+    background: white;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, .15);
+
+    opacity: 0;
+
+    transform: translateY(120px);
+
+    pointer-events: none;
+
+    transition: .3s ease;
+}
+
+
+.admin-support-notification.show {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+    pointer-events: auto;
+
+}
+
+
+.admin-support-notification-icon {
+
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 20px;
+}
+
+
+.admin-support-notification-content {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.admin-support-notification-content strong {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #111827;
+
+    font-size: 15px;
+
+}
+
+
+.admin-support-notification-content p {
+
+    margin: 0;
+
+    color: #667085;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+}
+
+
+.admin-support-notification > button {
+
+    border: 0;
+
+    background: transparent;
+
+    color: #9ca3af;
+
+    font-size: 20px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    padding: 0;
+
+}
+
+
+.admin-support-notification > button:hover {
+
+    color: #111827;
+
+}
+
+
+@media (max-width: 767px) {
+
+    .admin-support-notification {
+
+        left: 15px;
+
+        right: 15px;
+
+        bottom: 15px;
+
+        width: auto;
+
+    }
+
+}
+        .new-order-popup.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .new-order-popup-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .new-order-bell {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: #fef2f2;
+            color: #ef4444;
+            font-size: 20px;
+        }
+
+        .status-notification-bell {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .new-order-close {
+            border: 0;
+            background: transparent;
+            color: #9ca3af;
             cursor: pointer;
         }
 
-        .visitor-stat-icon {
-            background: rgba(22,163,74,.07);
-            border-color: rgba(22,163,74,.16);
-            color: var(--green);
+        .new-order-title {
+            margin-bottom: 4px;
+            font-size: 17px;
+            font-weight: bold;
         }
 
-        .visitor-stat-card:hover .visitor-stat-icon {
-            background: linear-gradient(135deg, var(--green), #15803d);
-            color: #ffffff;
+        .new-order-subtitle {
+            margin-bottom: 14px;
+            color: #667085;
+            font-size: 12px;
         }
 
-        .visitor-stat-link {
+        .new-order-info {
+            margin-bottom: 14px;
+            padding: 12px;
+            border: 1px solid #edf0f4;
+            border-radius: 10px;
+            background: #f9fafb;
+        }
+
+        .new-order-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            font-size: 12px;
+        }
+
+        .new-order-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .new-order-label {
+            color: #9ca3af;
+        }
+
+        .new-order-value {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .new-order-view {
             display: flex;
             align-items: center;
-            gap: 6px;
-            margin-top: 10px;
-            color: var(--green);
-            font-size: 11px;
-            font-weight: 700;
+            justify-content: center;
+            gap: 7px;
+            padding: 9px;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
         }
 
-        .visitor-stat-link i {
-            transition: transform .2s ease;
+        .new-order-view:hover {
+            background: #1d4ed8;
+            color: white;
         }
 
-        .visitor-stat-card:hover .visitor-stat-link i {
-            transform: translateX(4px);
-        }
-
-        /* =========================================================
-           ANIMATIONS
-        ========================================================= */
-
-        @keyframes sidebarIn {
-            from {
-                opacity: 0;
-                transform: translateX(-25px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes cardIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .stat-card:nth-child(1) {
-            animation-delay: .05s;
-        }
-
-        .stat-card:nth-child(2) {
-            animation-delay: .12s;
-        }
-
-        .stat-card:nth-child(3) {
-            animation-delay: .19s;
-        }
-
-        .stat-card:nth-child(4) {
-            animation-delay: .26s;
-        }
-
-        /* =========================================================
-           MOBILE
-        ========================================================= */
-
-        @media(max-width: 991px) {
+        @media (max-width: 991px) {
 
             .sidebar {
                 width: 220px;
@@ -933,35 +627,17 @@
 
             .main-content {
                 margin-left: 220px;
-                width: calc(100% - 220px);
-                padding: 30px;
+                padding: 25px;
             }
 
-            .main-content::before {
-                inset: 0 0 0 220px;
-            }
         }
 
-        @media(max-width: 767px) {
-
-            .admin-layout {
-                display: block;
-            }
+        @media (max-width: 767px) {
 
             .sidebar {
                 position: relative;
                 width: 100%;
-                min-height: auto;
-                padding: 20px;
-            }
-
-            .sidebar hr {
-                margin: 15px 0;
-            }
-
-            .sidebar-link {
-                display: inline-flex;
-                margin-right: 5px;
+                height: auto;
             }
 
             .sidebar-bottom {
@@ -970,296 +646,16 @@
 
             .main-content {
                 margin-left: 0;
-                width: 100%;
-                padding: 25px 18px;
-            }
-
-            .main-content::before {
-                inset: 0;
-            }
-
-            .header-actions {
-                margin-top: 20px;
-            }
-        }
-
-        @media(max-width: 576px) {
-
-            .brand-name {
-                font-size: 19px;
-            }
-
-            .sidebar-link {
-                width: 100%;
-            }
-
-            .page-title {
-                font-size: 2.2rem;
-            }
-
-            .product-header {
                 padding: 20px;
             }
-        }
 
-        @media(prefers-reduced-motion: reduce) {
-
-            * {
-                animation: none !important;
-                transition: none !important;
+            .new-order-popup {
+                left: 15px;
+                right: 15px;
+                width: auto;
             }
+
         }
-
-        /* =========================================================
-   NEW ORDER POPUP
-========================================================= */
-
-.new-order-popup {
-    position: fixed;
-    right: 25px;
-    bottom: 25px;
-
-    width: 350px;
-
-    background: rgba(255, 255, 255, 0.97);
-
-    border: 1px solid rgba(37, 99, 235, 0.15);
-
-    border-radius: 18px;
-
-    padding: 18px 20px;
-
-    box-shadow:
-        0 20px 50px rgba(15, 23, 42, 0.18);
-
-    backdrop-filter: blur(15px);
-
-    z-index: 9999;
-
-    transform: translateY(130px);
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        transform .35s ease,
-        opacity .35s ease;
-}
-
-.new-order-popup.show {
-    transform: translateY(0);
-    opacity: 1;
-
-    pointer-events: auto;
-}
-
-
-/* Popup top */
-
-.new-order-popup-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 14px;
-}
-
-
-/* Bell */
-
-.new-order-bell {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 12px;
-
-    background: rgba(239, 68, 68, .10);
-
-    color: #ef4444;
-
-    font-size: 20px;
-
-    box-shadow:
-        0 0 0 4px rgba(239, 68, 68, .06);
-
-    animation: orderBellPulse 1.5s infinite;
-}
-
-@keyframes orderBellPulse {
-
-    0%, 100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.08);
-    }
-
-}
-
-
-/* Close */
-
-.new-order-close {
-    width: 30px;
-    height: 30px;
-
-    border: 0;
-
-    background: transparent;
-
-    color: #98a2b3;
-
-    border-radius: 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-
-    transition: .2s ease;
-}
-
-.new-order-close:hover {
-    background: #f2f4f7;
-    color: #344054;
-}
-
-
-/* Title */
-
-.new-order-title {
-    font-family: var(--display);
-
-    font-size: 17px;
-
-    font-weight: 700;
-
-    color: var(--text);
-
-    margin-bottom: 4px;
-}
-
-
-/* Subtitle */
-
-.new-order-subtitle {
-    color: var(--muted);
-
-    font-size: 12px;
-
-    margin-bottom: 15px;
-}
-
-
-/* Order information */
-
-.new-order-info {
-    background: #f8fafc;
-
-    border: 1px solid #edf0f4;
-
-    border-radius: 12px;
-
-    padding: 12px 14px;
-
-    margin-bottom: 14px;
-}
-
-.new-order-row {
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 15px;
-
-    margin-bottom: 7px;
-
-    font-size: 12px;
-}
-
-.new-order-row:last-child {
-    margin-bottom: 0;
-}
-
-.new-order-label {
-    color: #98a2b3;
-}
-
-.new-order-value {
-    color: var(--text);
-
-    font-weight: 700;
-
-    text-align: right;
-}
-
-
-/* View button */
-
-.new-order-view {
-    width: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 7px;
-
-    padding: 10px 15px;
-
-    border-radius: 10px;
-
-    background: linear-gradient(
-        135deg,
-        var(--blue),
-        var(--indigo)
-    );
-
-    color: white;
-
-    text-decoration: none;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    box-shadow:
-        0 7px 18px rgba(37, 99, 235, .16);
-
-    transition: .2s ease;
-}
-
-.new-order-view:hover {
-    color: white;
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 10px 24px rgba(37, 99, 235, .23);
-}
-
-
-/* Mobile */
-
-@media(max-width: 576px) {
-
-    .new-order-popup {
-        left: 15px;
-        right: 15px;
-        bottom: 15px;
-
-        width: auto;
-    }
-
-}
 
     </style>
 
@@ -1342,6 +738,27 @@
         <span class="order-notification">
             {{ $newOrders }}
         </span>
+    @endif
+
+</a>
+
+<a
+    href="{{ url('/admin/customer-messages') }}"
+    class="sidebar-link"
+>
+
+    <i class="bi bi-chat-dots"></i>
+
+    <span>
+        Customer Messages
+    </span>
+
+    @if(($newMessages ?? 0) > 0)
+
+        <span class="order-notification">
+            {{ $newMessages }}
+        </span>
+
     @endif
 
 </a>
@@ -1861,119 +1278,44 @@
 </div>
 
 <!-- =========================================================
-     ORDER STATUS UPDATE POPUP
+     ADMIN CUSTOMER MESSAGE POPUP
 ========================================================= -->
 
 <div
-    id="orderStatusPopup"
-    class="new-order-popup"
+    id="adminSupportNotification"
+    class="admin-support-notification"
 >
 
-    <div class="new-order-popup-top">
+    <div class="admin-support-notification-icon">
 
-        <div class="new-order-bell status-notification-bell">
-
-            <i
-                id="statusPopupIcon"
-                class="bi bi-truck"
-            ></i>
-
-        </div>
-
-        <button
-            type="button"
-            class="new-order-close"
-            id="closeStatusPopup"
-            aria-label="Close"
-        >
-
-            <i class="bi bi-x-lg"></i>
-
-        </button>
+        <i class="bi bi-chat-dots-fill"></i>
 
     </div>
 
 
-    <div
-        class="new-order-title"
-        id="statusPopupTitle"
+    <div class="admin-support-notification-content">
+
+        <strong>
+            New Customer Message
+        </strong>
+
+        <p id="adminSupportNotificationText">
+            A customer sent you a new message.
+        </p>
+
+    </div>
+
+
+    <button
+        type="button"
+        onclick="closeAdminSupportNotification()"
+        aria-label="Close notification"
     >
-        Order Status Updated
-    </div>
-
-
-    <div
-        class="new-order-subtitle"
-        id="statusPopupMessage"
-    >
-        An order status has been updated.
-    </div>
-
-
-    <div class="new-order-info">
-
-        <div class="new-order-row">
-
-            <span class="new-order-label">
-                Order
-            </span>
-
-            <span
-                class="new-order-value"
-                id="statusPopupOrderId"
-            >
-                —
-            </span>
-
-        </div>
-
-
-        <div class="new-order-row">
-
-            <span class="new-order-label">
-                Customer
-            </span>
-
-            <span
-                class="new-order-value"
-                id="statusPopupCustomer"
-            >
-                —
-            </span>
-
-        </div>
-
-
-        <div class="new-order-row">
-
-            <span class="new-order-label">
-                Status
-            </span>
-
-            <span
-                class="new-order-value"
-                id="statusPopupStatus"
-            >
-                —
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <a
-        href="{{ url('/admin/orders') }}"
-        class="new-order-view"
-    >
-
-        View Order
-
-        <i class="bi bi-arrow-right"></i>
-
-    </a>
+        ×
+    </button>
 
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
 <audio id="orderNotificationSound" preload="auto">
@@ -2359,6 +1701,379 @@ document.addEventListener('DOMContentLoaded', function () {
 
         });
 });
+</script>
+<script>
+
+/* =========================================================
+   ADMIN CUSTOMER MESSAGE NOTIFICATIONS
+========================================================= */
+
+let lastAdminSupportMessageId = null;
+
+let adminSupportAudioContext = null;
+
+
+/* =========================================================
+   ENABLE AUDIO
+========================================================= */
+
+async function enableAdminSupportSound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+
+        if (!AudioContext) {
+
+            return false;
+
+        }
+
+
+        if (!adminSupportAudioContext) {
+
+            adminSupportAudioContext =
+                new AudioContext();
+
+        }
+
+
+        if (
+            adminSupportAudioContext.state ===
+            "suspended"
+        ) {
+
+            await adminSupportAudioContext.resume();
+
+        }
+
+
+        return (
+            adminSupportAudioContext.state ===
+            "running"
+        );
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Admin audio error:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   PLAY ADMIN NOTIFICATION SOUND
+========================================================= */
+
+async function playAdminSupportSound() {
+
+    const ready =
+        await enableAdminSupportSound();
+
+
+    if (!ready) {
+
+        return;
+
+    }
+
+
+    const now =
+        adminSupportAudioContext.currentTime;
+
+
+    const oscillator =
+        adminSupportAudioContext.createOscillator();
+
+    const gain =
+        adminSupportAudioContext.createGain();
+
+
+    oscillator.type = "sine";
+
+
+    oscillator.frequency.setValueAtTime(
+        880,
+        now
+    );
+
+
+    oscillator.frequency.setValueAtTime(
+        1174,
+        now + 0.15
+    );
+
+
+    gain.gain.setValueAtTime(
+        0.001,
+        now
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.35,
+        now + 0.03
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        now + 0.55
+    );
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+        adminSupportAudioContext.destination
+    );
+
+
+    oscillator.start(now);
+
+    oscillator.stop(
+        now + 0.55
+    );
+
+}
+
+
+/* =========================================================
+   UNLOCK ADMIN AUDIO
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function () {
+
+        enableAdminSupportSound();
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    function () {
+
+        enableAdminSupportSound();
+
+    }
+);
+
+
+/* =========================================================
+   SHOW ADMIN POPUP
+========================================================= */
+
+function showAdminSupportNotification(message) {
+
+    const popup =
+        document.getElementById(
+            "adminSupportNotification"
+        );
+
+
+    const text =
+        document.getElementById(
+            "adminSupportNotificationText"
+        );
+
+
+    if (!popup) {
+
+        console.log(
+            "Admin notification popup not found."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        message &&
+        message.text &&
+        text
+    ) {
+
+        text.textContent =
+            message.text;
+
+    }
+
+
+    popup.classList.add(
+        "show"
+    );
+
+
+    playAdminSupportSound();
+
+
+    clearTimeout(
+        window.adminSupportNotificationTimer
+    );
+
+
+    window.adminSupportNotificationTimer =
+        setTimeout(
+            function () {
+
+                popup.classList.remove(
+                    "show"
+                );
+
+            },
+            6000
+        );
+
+}
+
+
+/* =========================================================
+   CLOSE ADMIN POPUP
+========================================================= */
+
+function closeAdminSupportNotification() {
+
+    const popup =
+        document.getElementById(
+            "adminSupportNotification"
+        );
+
+
+    if (popup) {
+
+        popup.classList.remove(
+            "show"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CHECK FOR CUSTOMER MESSAGE
+========================================================= */
+
+async function checkAdminSupportNotifications() {
+
+    try {
+
+        const response =
+            await fetch(
+                "{{ url('/admin/customer-messages/check-notifications') }}",
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Accept":
+                            "application/json",
+
+                        "X-Requested-With":
+                            "XMLHttpRequest"
+                    },
+
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            return;
+
+        }
+
+
+        if (!data.message) {
+
+            return;
+
+        }
+
+
+        /*
+         * First request only remembers
+         * the existing unread message.
+         */
+
+        if (
+            data.message.id !=
+            lastAdminSupportMessageId
+        ) {
+
+
+            if (
+                lastAdminSupportMessageId !==
+                null
+            ) {
+
+                showAdminSupportNotification(
+                    data.message
+                );
+
+            }
+
+
+            lastAdminSupportMessageId =
+                data.message.id;
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Admin support notification error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   START CHECKING
+========================================================= */
+
+checkAdminSupportNotifications();
+
+
+setInterval(
+    checkAdminSupportNotifications,
+    5000
+);
+
 </script>
 </body>
 </html>

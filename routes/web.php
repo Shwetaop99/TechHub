@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\StoreSetting;
 use App\Models\Visitor;
 use App\Models\Admin;
+use App\Models\OrderNotification;
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
@@ -18,7 +19,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminVisitorController;
-use App\Models\OrderNotification;
+use App\Http\Controllers\SupportController;
+use App\Http\Controllers\AdminSupportController;
+use App\Http\Controllers\AdminManagementController;
+use App\Models\SupportMessage;
 
 
 /*
@@ -58,13 +62,81 @@ Route::get('/product/{product}', [
 |--------------------------------------------------------------------------
 */
 
+/*
+|--------------------------------------------------------------------------
+| ABOUT & CONTACT
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/about', function () {
     return view('about');
 });
 
-Route::get('/contact', function () {
-    return view('contact');
-});
+
+/*
+|--------------------------------------------------------------------------
+| CUSTOMER SUPPORT
+|--------------------------------------------------------------------------
+*/
+
+// Contact page
+Route::get('/contact', [
+    SupportController::class,
+    'index'
+]);
+
+
+// Customer support page
+Route::get('/customer-support', [
+    SupportController::class,
+    'index'
+]);
+
+
+// Send new inquiry
+Route::post('/customer-support', [
+    SupportController::class,
+    'store'
+]);
+
+
+// Customer reply
+Route::post(
+    '/customer-support/{conversation}/reply',
+    [
+        SupportController::class,
+        'reply'
+    ]
+);
+
+
+// Mark admin replies as read
+Route::post(
+    '/customer-support/{conversation}/read',
+    [
+        SupportController::class,
+        'markAsRead'
+    ]
+);
+
+
+// Delete conversation
+Route::delete(
+    '/customer-support/{conversation}',
+    [
+        SupportController::class,
+        'destroy'
+    ]
+);
+
+
+Route::get(
+    '/admin/customer-messages/check-notifications',
+    [
+        SupportController::class,
+        'checkAdminNotifications'
+    ]
+);
 
 
 /*
@@ -121,16 +193,6 @@ Route::post('/admin/login', function (Request $request) {
 
     /*
     |--------------------------------------------------------------------------
-    | NORMAL ADMIN
-    |--------------------------------------------------------------------------
-    | Normal admins are created by the Super Admin from
-    | Manage Admins. Their credentials and permissions
-    | come from the admins table.
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
     | ENTERED CREDENTIALS
     |--------------------------------------------------------------------------
     */
@@ -155,7 +217,6 @@ Route::post('/admin/login', function (Request $request) {
         $enteredPassword === $superAdminPassword
     ) {
 
-        // Make sure the Normal Admin session is not active.
         $request->session()->forget(
             'normal_admin_logged_in'
         );
@@ -182,6 +243,7 @@ Route::post('/admin/login', function (Request $request) {
         $enteredId
     )->first();
 
+
     if (
         $admin &&
         Hash::check(
@@ -190,12 +252,12 @@ Route::post('/admin/login', function (Request $request) {
         )
     ) {
 
-        // Make sure the Super Admin session is not active.
         $request->session()->forget(
             'admin_logged_in'
         );
 
         $request->session()->regenerate();
+
 
         /*
         |--------------------------------------------------------------------------
@@ -242,7 +304,9 @@ Route::post('/admin/login', function (Request $request) {
 
             'can_view_visitors' =>
                 (bool) $admin->can_view_visitors,
+
         ]);
+
 
         return redirect('/admin-user');
     }
@@ -268,6 +332,28 @@ Route::post('/admin/login', function (Request $request) {
 
 /*
 |--------------------------------------------------------------------------
+| ADMIN CUSTOMER MESSAGES
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/customer-messages',
+    [AdminSupportController::class, 'index']
+);
+
+Route::get(
+    '/admin/customer-messages/{conversation}',
+    [AdminSupportController::class, 'show']
+);
+
+Route::post(
+    '/admin/customer-messages/{conversation}/reply',
+    [AdminSupportController::class, 'reply']
+);
+
+
+/*
+|--------------------------------------------------------------------------
 | SUPER ADMIN DASHBOARD
 |--------------------------------------------------------------------------
 */
@@ -278,23 +364,31 @@ Route::get('/admin', function () {
         return redirect('/admin/login');
     }
 
-    $products = Product::all();
+    $products =
+        Product::all();
 
-    $totalProducts = Product::count();
+    $totalProducts =
+        Product::count();
 
-    $totalSold = Product::sum('sold_count');
+    $totalSold =
+        Product::sum('sold_count');
 
-    $totalCategories = Product::distinct('category')
-        ->count('category');
+    $totalCategories =
+        Product::distinct('category')
+            ->count('category');
 
-    $totalStock = Product::sum('stock');
+    $totalStock =
+        Product::sum('stock');
 
-    $totalVisitors = Visitor::count();
+    $totalVisitors =
+        Visitor::count();
 
-    $newOrders = Order::where(
-        'is_read',
-        false
-    )->count();
+    $newOrders =
+        Order::where(
+            'is_read',
+            false
+        )->count();
+
 
     return view(
         'admin',
@@ -308,7 +402,9 @@ Route::get('/admin', function () {
             'newOrders'
         )
     );
+
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -316,32 +412,49 @@ Route::get('/admin', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/manage-admins', [
-    \App\Http\Controllers\AdminManagementController::class,
-    'index'
-])->name('admin.manage');
+Route::get(
+    '/admin/manage-admins',
+    [
+        AdminManagementController::class,
+        'index'
+    ]
+)->name('admin.manage');
 
 
-Route::post('/admin/manage-admins', [
-    \App\Http\Controllers\AdminManagementController::class,
-    'store'
-]);
+Route::post(
+    '/admin/manage-admins',
+    [
+        AdminManagementController::class,
+        'store'
+    ]
+);
 
 
-Route::delete('/admin/manage-admins/{admin}', [
-    \App\Http\Controllers\AdminManagementController::class,
-    'destroy'
-]);
+Route::delete(
+    '/admin/manage-admins/{admin}',
+    [
+        AdminManagementController::class,
+        'destroy'
+    ]
+);
 
-Route::get('/admin/manage-admins/{admin}/edit', [
-    \App\Http\Controllers\AdminManagementController::class,
-    'edit'
-])->name('admin.manage.edit');
 
-Route::put('/admin/manage-admins/{admin}', [
-    \App\Http\Controllers\AdminManagementController::class,
-    'update'
-])->name('admin.manage.update');
+Route::get(
+    '/admin/manage-admins/{admin}/edit',
+    [
+        AdminManagementController::class,
+        'edit'
+    ]
+)->name('admin.manage.edit');
+
+
+Route::put(
+    '/admin/manage-admins/{admin}',
+    [
+        AdminManagementController::class,
+        'update'
+    ]
+)->name('admin.manage.update');
 
 
 /*
@@ -352,58 +465,87 @@ Route::put('/admin/manage-admins/{admin}', [
 
 Route::get('/admin-user', function () {
 
-    $normalAdmin = Admin::find(session('normal_admin_id'));
+    $normalAdmin =
+        Admin::find(
+            session('normal_admin_id')
+        );
 
-if (!$normalAdmin) {
-    return redirect('/admin/login');
-}
 
-    /*
-    |--------------------------------------------------------------------------
-    | NORMAL ADMIN PERMISSIONS
-    |--------------------------------------------------------------------------
-    | The dashboard receives exactly the permissions assigned
-    | to this admin by the Super Admin.
-    |--------------------------------------------------------------------------
-    */
+    if (!$normalAdmin) {
+        return redirect('/admin/login');
+    }
+
 
     $permissions = [
 
         'dashboard' =>
-            session('can_view_dashboard', false),
+            session(
+                'can_view_dashboard',
+                false
+            ),
 
         'website' =>
-            session('can_view_website', false),
+            session(
+                'can_view_website',
+                false
+            ),
 
         'products' =>
-            session('can_view_products', false),
+            session(
+                'can_view_products',
+                false
+            ),
 
         'add_products' =>
-            session('can_add_products', false),
+            session(
+                'can_add_products',
+                false
+            ),
 
         'orders' =>
-            session('can_view_orders', false),
+            session(
+                'can_view_orders',
+                false
+            ),
 
         'customers' =>
-            session('can_view_customers', false),
+            session(
+                'can_view_customers',
+                false
+            ),
 
         'inventory' =>
-            session('can_view_inventory', false),
+            session(
+                'can_view_inventory',
+                false
+            ),
 
         'coupons' =>
-            session('can_view_coupons', false),
+            session(
+                'can_view_coupons',
+                false
+            ),
 
         'settings' =>
-            session('can_view_settings', false),
+            session(
+                'can_view_settings',
+                false
+            ),
 
         'visitors' =>
-            session('can_view_visitors', false),
+            session(
+                'can_view_visitors',
+                false
+            ),
+
     ];
+
 
     return view(
         'admin-user',
         compact('permissions')
     );
+
 });
 
 
@@ -413,19 +555,27 @@ if (!$normalAdmin) {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin-user/products/create', function () {
+Route::get(
+    '/admin-user/products/create',
+    function () {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        if (!session('can_add_products')) {
+            abort(
+                403,
+                'You do not have permission to add products.'
+            );
+        }
+
+        return view(
+            'admin-products-create'
+        );
+
     }
-
-    if (!session('can_add_products')) {
-        abort(403, 'You do not have permission to add products.');
-    }
-
-    return view('admin-products-create');
-
-});
+);
 
 
 /*
@@ -434,84 +584,95 @@ Route::get('/admin-user/products/create', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::post('/admin-user/products', function (Request $request) {
+Route::post(
+    '/admin-user/products',
+    function (Request $request) {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
-    }
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
 
-    if (!session('can_add_products')) {
-        abort(403, 'You do not have permission to add products.');
-    }
+        if (!session('can_add_products')) {
+            abort(403);
+        }
 
-    $request->validate([
 
-        'name' =>
-            'required',
+        $request->validate([
 
-        'category' =>
-            'required',
+            'name' =>
+                'required',
 
-        'price' =>
-            'required|numeric',
+            'category' =>
+                'required',
 
-        'stock' =>
-            'required|integer',
+            'price' =>
+                'required|numeric',
 
-        'description' =>
-            'required',
+            'stock' =>
+                'required|integer',
 
-        'image' =>
-            'required|image|max:5120',
+            'description' =>
+                'required',
 
-    ]);
+            'image' =>
+                'required|image|max:5120',
 
-    $imagePath = $request
-        ->file('image')
-        ->getRealPath();
+        ]);
 
-    $uploadedImage =
-        (new \Cloudinary\Api\Upload\UploadApi())
-        ->upload($imagePath);
 
-    $image =
-        $uploadedImage['secure_url'];
+        $imagePath =
+            $request
+                ->file('image')
+                ->getRealPath();
 
-    Product::create([
 
-        'name' =>
-            $request->name,
+        $uploadedImage =
+            (new \Cloudinary\Api\Upload\UploadApi())
+                ->upload($imagePath);
 
-        'category' =>
-            $request->category,
 
-        'price' =>
-            $request->price,
+        $image =
+            $uploadedImage['secure_url'];
 
-        'description' =>
-            $request->description,
 
-        'image' =>
-            $image,
+        Product::create([
 
-        'stock' =>
-            $request->stock,
+            'name' =>
+                $request->name,
 
-        'stock_received' =>
-            $request->stock,
+            'category' =>
+                $request->category,
 
-        'sold_count' =>
-            0,
+            'price' =>
+                $request->price,
 
-    ]);
+            'description' =>
+                $request->description,
 
-    return redirect('/admin-user/products/create')
-        ->with(
+            'image' =>
+                $image,
+
+            'stock' =>
+                $request->stock,
+
+            'stock_received' =>
+                $request->stock,
+
+            'sold_count' =>
+                0,
+
+        ]);
+
+
+        return redirect(
+            '/admin-user/products/create'
+        )->with(
             'success',
             'Product added successfully!'
         );
 
-});
+    }
+);
 
 
 /*
@@ -520,19 +681,22 @@ Route::post('/admin-user/products', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin-user/website', function () {
+Route::get(
+    '/admin-user/website',
+    function () {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        if (!session('can_view_website')) {
+            abort(403);
+        }
+
+        return redirect('/');
+
     }
-
-    if (!session('can_view_website')) {
-        abort(403);
-    }
-
-    return redirect('/');
-
-});
+);
 
 
 /*
@@ -541,21 +705,24 @@ Route::get('/admin-user/website', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin-user/products', function () {
+Route::get(
+    '/admin-user/products',
+    function () {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        if (!session('can_view_products')) {
+            abort(403);
+        }
+
+        return app(
+            AdminProductController::class
+        )->index();
+
     }
-
-    if (!session('can_view_products')) {
-        abort(403);
-    }
-
-    return app(
-        AdminProductController::class
-    )->index();
-
-});
+);
 
 
 /*
@@ -564,21 +731,24 @@ Route::get('/admin-user/products', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin-user/customers', function () {
+Route::get(
+    '/admin-user/customers',
+    function () {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        if (!session('can_view_customers')) {
+            abort(403);
+        }
+
+        return app(
+            CustomerController::class
+        )->index();
+
     }
-
-    if (!session('can_view_customers')) {
-        abort(403);
-    }
-
-    return app(
-        CustomerController::class
-    )->index();
-
-});
+);
 
 
 /*
@@ -587,39 +757,43 @@ Route::get('/admin-user/customers', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin-user/inventory', function () {
+Route::get(
+    '/admin-user/inventory',
+    function () {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        if (!session('can_view_inventory')) {
+            abort(403);
+        }
+
+        $products =
+            Product::orderBy('name')->get();
+
+        $totalProducts =
+            Product::count();
+
+        $totalStock =
+            Product::sum('stock');
+
+        $totalSold =
+            Product::sum('sold_count');
+
+
+        return view(
+            'admin-inventory',
+            compact(
+                'products',
+                'totalProducts',
+                'totalStock',
+                'totalSold'
+            )
+        );
+
     }
-
-    if (!session('can_view_inventory')) {
-        abort(403);
-    }
-
-    $products =
-        Product::orderBy('name')->get();
-
-    $totalProducts =
-        Product::count();
-
-    $totalStock =
-        Product::sum('stock');
-
-    $totalSold =
-        Product::sum('sold_count');
-
-    return view(
-        'admin-inventory',
-        compact(
-            'products',
-            'totalProducts',
-            'totalStock',
-            'totalSold'
-        )
-    );
-
-});
+);
 
 
 /*
@@ -628,25 +802,29 @@ Route::get('/admin-user/inventory', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin-user/coupons', function () {
+Route::get(
+    '/admin-user/coupons',
+    function () {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        if (!session('can_view_coupons')) {
+            abort(403);
+        }
+
+        $coupons =
+            \App\Models\Coupon::latest()->get();
+
+
+        return view(
+            'admin-coupons',
+            compact('coupons')
+        );
+
     }
-
-    if (!session('can_view_coupons')) {
-        abort(403);
-    }
-
-    $coupons =
-        \App\Models\Coupon::latest()->get();
-
-    return view(
-        'admin-coupons',
-        compact('coupons')
-    );
-
-});
+);
 
 
 /*
@@ -655,25 +833,29 @@ Route::get('/admin-user/coupons', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin-user/settings', function () {
+Route::get(
+    '/admin-user/settings',
+    function () {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        if (!session('can_view_settings')) {
+            abort(403);
+        }
+
+        $settings =
+            StoreSetting::first();
+
+
+        return view(
+            'admin-settings',
+            compact('settings')
+        );
+
     }
-
-    if (!session('can_view_settings')) {
-        abort(403);
-    }
-
-    $settings =
-        StoreSetting::first();
-
-    return view(
-        'admin-settings',
-        compact('settings')
-    );
-
-});
+);
 
 
 /*
@@ -682,21 +864,24 @@ Route::get('/admin-user/settings', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin-user/visitors', function () {
+Route::get(
+    '/admin-user/visitors',
+    function () {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        if (!session('can_view_visitors')) {
+            abort(403);
+        }
+
+        return app(
+            AdminVisitorController::class
+        )->index();
+
     }
-
-    if (!session('can_view_visitors')) {
-        abort(403);
-    }
-
-    return app(
-        AdminVisitorController::class
-    )->index();
-
-});
+);
 
 
 /*
@@ -705,29 +890,216 @@ Route::get('/admin-user/visitors', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin-user/orders', function () {
+Route::get(
+    '/admin-user/orders',
+    function () {
 
-    if (!session('normal_admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('normal_admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        if (!session('can_view_orders')) {
+            abort(403);
+        }
+
+        $orders =
+            Order::with([
+                'user',
+                'product'
+            ])
+            ->latest('id')
+            ->get();
+
+
+        return view(
+            'admin-customer-orders',
+            compact('orders')
+        );
+
     }
+);
 
-    if (!session('can_view_orders')) {
-        abort(403);
+/*
+|--------------------------------------------------------------------------
+| NORMAL ADMIN - UPDATE ORDER STATUS
+|--------------------------------------------------------------------------
+*/
+
+Route::post(
+    '/admin-user/orders/{order}/status',
+    function (
+        Request $request,
+        Order $order
+    ) {
+
+        /*
+        |--------------------------------------------------------------------------
+        | NORMAL ADMIN AUTHORIZATION
+        |--------------------------------------------------------------------------
+        */
+
+        if (!normalAdminCan('can_view_orders')) {
+
+            abort(
+                403,
+                'You do not have permission to update orders.'
+            );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATE STATUS
+        |--------------------------------------------------------------------------
+        */
+
+        $request->validate([
+
+            'status' =>
+                'required|in:pending,processing,shipped,out_for_delivery,delivered,cancelled',
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE ORDER
+        |--------------------------------------------------------------------------
+        */
+
+        $order->update([
+
+            'status' =>
+                $request->input('status'),
+
+            'is_read' =>
+                true,
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CUSTOMER NOTIFICATION
+        |--------------------------------------------------------------------------
+        */
+
+        $notificationData = [
+
+            'pending' => [
+                'title' =>
+                    'Order Pending',
+
+                'message' =>
+                    'Your order #' .
+                    $order->id .
+                    ' is currently pending.',
+            ],
+
+            'processing' => [
+                'title' =>
+                    'Order Confirmed',
+
+                'message' =>
+                    'Your order #' .
+                    $order->id .
+                    ' has been confirmed and is being processed.',
+            ],
+
+            'shipped' => [
+                'title' =>
+                    'Order Shipped',
+
+                'message' =>
+                    'Your order #' .
+                    $order->id .
+                    ' has been shipped.',
+            ],
+
+            'out_for_delivery' => [
+                'title' =>
+                    'Out for Delivery 🚚',
+
+                'message' =>
+                    'Your order #' .
+                    $order->id .
+                    ' is out for delivery and will arrive soon.',
+            ],
+
+            'delivered' => [
+                'title' =>
+                    'Order Delivered 🎉',
+
+                'message' =>
+                    'Your order #' .
+                    $order->id .
+                    ' has been delivered successfully.',
+            ],
+
+            'cancelled' => [
+                'title' =>
+                    'Order Cancelled',
+
+                'message' =>
+                    'Your order #' .
+                    $order->id .
+                    ' has been cancelled.',
+            ],
+
+        ];
+
+
+        if (
+            $order->user_id &&
+            isset(
+                $notificationData[
+                    $order->status
+                ]
+            )
+        ) {
+
+            OrderNotification::create([
+
+                'user_id' =>
+                    $order->user_id,
+
+                'order_id' =>
+                    $order->id,
+
+                'status' =>
+                    $order->status,
+
+                'title' =>
+                    $notificationData[
+                        $order->status
+                    ]['title'],
+
+                'message' =>
+                    $notificationData[
+                        $order->status
+                    ]['message'],
+
+                'is_read' =>
+                    false,
+
+            ]);
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN
+        |--------------------------------------------------------------------------
+        */
+
+        return redirect(
+            '/admin-user/orders'
+        )->with(
+            'success',
+            'Order status updated successfully.'
+        );
     }
-
-    $orders = Order::with([
-        'user',
-        'product'
-    ])
-    ->latest('id')
-    ->get();
-
-    return view(
-        'admin-customer-orders',
-        compact('orders')
-    );
-});
-
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -735,16 +1107,20 @@ Route::get('/admin-user/orders', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/orders', function () {
+Route::get(
+    '/admin/orders',
+    function () {
 
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        return app(
+            OrderController::class
+        )->index();
+
     }
-
-    return app(
-        OrderController::class
-    )->index();
-});
+);
 
 
 Route::post(
@@ -758,6 +1134,7 @@ Route::post(
         return app(
             OrderController::class
         )->markAsRead($order);
+
     }
 );
 
@@ -779,6 +1156,7 @@ Route::post(
             $request,
             $order
         );
+
     }
 );
 
@@ -805,15 +1183,18 @@ Route::post(
                 'required|in:pending,paid,failed,refunded',
         ]);
 
+
         $order->update([
             'payment_status' =>
                 $request->payment_status,
         ]);
 
+
         return back()->with(
             'success',
             'Payment status updated successfully!'
         );
+
     }
 );
 
@@ -824,16 +1205,20 @@ Route::post(
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/customers', function () {
+Route::get(
+    '/admin/customers',
+    function () {
 
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        return app(
+            CustomerController::class
+        )->index();
+
     }
-
-    return app(
-        CustomerController::class
-    )->index();
-});
+);
 
 
 /*
@@ -842,14 +1227,20 @@ Route::get('/admin/customers', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/products/create', function () {
+Route::get(
+    '/admin/products/create',
+    function () {
 
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        return view(
+            'admin-products-create'
+        );
+
     }
-
-    return view('admin-products-create');
-});
+);
 
 
 /*
@@ -858,16 +1249,20 @@ Route::get('/admin/products/create', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/visitors', function () {
+Route::get(
+    '/admin/visitors',
+    function () {
 
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        return app(
+            AdminVisitorController::class
+        )->index();
+
     }
-
-    return app(
-        AdminVisitorController::class
-    )->index();
-});
+);
 
 
 /*
@@ -876,168 +1271,129 @@ Route::get('/admin/visitors', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::post('/admin/products', function (Request $request) {
+Route::post(
+    '/admin/products',
+    function (Request $request) {
 
-    /*
-    |--------------------------------------------------------------------------
-    | SUPER ADMIN CHECK
-    |--------------------------------------------------------------------------
-    */
-
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
-    }
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | VALIDATION
-    |--------------------------------------------------------------------------
-    */
+        $request->validate([
 
-    $request->validate([
+            'name' =>
+                'required',
 
-        'name' =>
-            'required',
+            'category' =>
+                'required',
 
-        'category' =>
-            'required',
+            'price' =>
+                'required|numeric',
 
-        'price' =>
-            'required|numeric',
+            'stock' =>
+                'required|integer',
 
-        'stock' =>
-            'required|integer',
+            'description' =>
+                'required',
 
-        'description' =>
-            'required',
+            'images' =>
+                'required|array|min:1|max:5',
 
-        'images' =>
-            'required|array|min:1|max:5',
-
-        'images.*' =>
-            'required|image|max:5120',
-
-    ]);
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CREATE PRODUCT FIRST
-    |--------------------------------------------------------------------------
-    */
-
-    $product = Product::create([
-
-        'name' =>
-            $request->name,
-
-        'category' =>
-            $request->category,
-
-        'price' =>
-            $request->price,
-
-        'description' =>
-            $request->description,
-
-        'stock' =>
-            $request->stock,
-
-        'stock_received' =>
-            $request->stock,
-
-        'sold_count' =>
-            0,
-
-        // Main image will be added below
-        'image' =>
-            null,
-
-    ]);
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | UPLOAD IMAGES
-    |--------------------------------------------------------------------------
-    */
-
-    $images =
-        $request->file('images');
-
-
-    foreach (
-        $images as $index => $uploadedFile
-    ) {
-
-        $imagePath =
-            $uploadedFile->getRealPath();
-
-
-        $uploadedImage =
-            (new \Cloudinary\Api\Upload\UploadApi())
-            ->upload($imagePath);
-
-
-        $imageUrl =
-            $uploadedImage['secure_url'];
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | SAVE IMAGE
-        |--------------------------------------------------------------------------
-        */
-
-        \App\Models\ProductImage::create([
-
-            'product_id' =>
-                $product->id,
-
-            'image' =>
-                $imageUrl,
-
-            'sort_order' =>
-                $index,
+            'images.*' =>
+                'required|image|max:5120',
 
         ]);
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | FIRST IMAGE = MAIN PRODUCT IMAGE
-        |--------------------------------------------------------------------------
-        */
+        $product =
+            Product::create([
 
-        if ($index === 0) {
+                'name' =>
+                    $request->name,
 
-            $product->update([
+                'category' =>
+                    $request->category,
+
+                'price' =>
+                    $request->price,
+
+                'description' =>
+                    $request->description,
+
+                'stock' =>
+                    $request->stock,
+
+                'stock_received' =>
+                    $request->stock,
+
+                'sold_count' =>
+                    0,
+
+                'image' =>
+                    null,
+
+            ]);
+
+
+        $images =
+            $request->file('images');
+
+
+        foreach (
+            $images as $index => $uploadedFile
+        ) {
+
+            $imagePath =
+                $uploadedFile->getRealPath();
+
+
+            $uploadedImage =
+                (new \Cloudinary\Api\Upload\UploadApi())
+                    ->upload($imagePath);
+
+
+            $imageUrl =
+                $uploadedImage['secure_url'];
+
+
+            \App\Models\ProductImage::create([
+
+                'product_id' =>
+                    $product->id,
 
                 'image' =>
                     $imageUrl,
 
+                'sort_order' =>
+                    $index,
+
             ]);
+
+
+            if ($index === 0) {
+
+                $product->update([
+
+                    'image' =>
+                        $imageUrl,
+
+                ]);
+
+            }
 
         }
 
+
+        return redirect(
+            '/admin/products'
+        )->with(
+            'success',
+            'Product added successfully with multiple images!'
+        );
+
     }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SUCCESS
-    |--------------------------------------------------------------------------
-    */
-
-    return redirect(
-        '/admin/products'
-    )->with(
-        'success',
-        'Product added successfully with multiple images!'
-    );
-
-});
+);
 
 
 /*
@@ -1046,16 +1402,20 @@ Route::post('/admin/products', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/products', function () {
+Route::get(
+    '/admin/products',
+    function () {
 
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        return app(
+            AdminProductController::class
+        )->index();
+
     }
-
-    return app(
-        AdminProductController::class
-    )->index();
-});
+);
 
 
 /*
@@ -1064,34 +1424,39 @@ Route::get('/admin/products', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/inventory', function () {
+Route::get(
+    '/admin/inventory',
+    function () {
 
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+        $products =
+            Product::orderBy('name')->get();
+
+        $totalProducts =
+            Product::count();
+
+        $totalStock =
+            Product::sum('stock');
+
+        $totalSold =
+            Product::sum('sold_count');
+
+
+        return view(
+            'admin-inventory',
+            compact(
+                'products',
+                'totalProducts',
+                'totalStock',
+                'totalSold'
+            )
+        );
+
     }
-
-    $products =
-        Product::orderBy('name')->get();
-
-    $totalProducts =
-        Product::count();
-
-    $totalStock =
-        Product::sum('stock');
-
-    $totalSold =
-        Product::sum('sold_count');
-
-    return view(
-        'admin-inventory',
-        compact(
-            'products',
-            'totalProducts',
-            'totalStock',
-            'totalSold'
-        )
-    );
-});
+);
 
 
 /*
@@ -1116,8 +1481,10 @@ Route::post(
                 'required|integer|min:1',
         ]);
 
+
         $quantity =
             (int) $request->quantity;
+
 
         $product->increment(
             'stock',
@@ -1129,6 +1496,7 @@ Route::post(
             $quantity
         );
 
+
         return back()->with(
             'success',
             $quantity .
@@ -1136,6 +1504,7 @@ Route::post(
             $product->name .
             '!'
         );
+
     }
 );
 
@@ -1146,98 +1515,114 @@ Route::post(
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/coupons', function () {
+Route::get(
+    '/admin/coupons',
+    function () {
 
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
-    }
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
 
-    $coupons =
-        \App\Models\Coupon::latest()->get();
-
-    return view(
-        'admin-coupons',
-        compact('coupons')
-    );
-});
+        $coupons =
+            \App\Models\Coupon::latest()->get();
 
 
-Route::post('/admin/coupons', function (Request $request) {
-
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
-    }
-
-    $request->validate([
-
-        'code' =>
-            'required|string|max:50|unique:coupons,code',
-
-        'type' =>
-            'required|in:percentage,fixed',
-
-        'value' =>
-            'required|numeric|min:1',
-
-        'minimum_amount' =>
-            'required|numeric|min:10000',
-
-        'expires_at' =>
-            'nullable|date',
-
-    ]);
-
-    if (
-        $request->type === 'percentage' &&
-        (float) $request->value > 100
-    ) {
-
-        return back()
-            ->withErrors([
-                'value' =>
-                    'Percentage discount cannot exceed 100%.'
-            ])
-            ->withInput();
-    }
-
-    $code =
-        strtoupper(
-            trim($request->code)
+        return view(
+            'admin-coupons',
+            compact('coupons')
         );
 
-    \App\Models\Coupon::create([
+    }
+);
 
-        'code' =>
-            $code,
 
-        'type' =>
-            $request->type,
+Route::post(
+    '/admin/coupons',
+    function (Request $request) {
 
-        'value' =>
-            $request->value,
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
 
-        'minimum_amount' =>
-            $request->minimum_amount,
 
-        'expires_at' =>
-            $request->expires_at ?: null,
+        $request->validate([
 
-        'is_active' =>
-            true,
+            'code' =>
+                'required|string|max:50|unique:coupons,code',
 
-        'used_count' =>
-            0,
+            'type' =>
+                'required|in:percentage,fixed',
 
-    ]);
+            'value' =>
+                'required|numeric|min:1',
 
-    return redirect('/admin/coupons')
-        ->with(
+            'minimum_amount' =>
+                'required|numeric|min:10000',
+
+            'expires_at' =>
+                'nullable|date',
+
+        ]);
+
+
+        if (
+            $request->type === 'percentage' &&
+            (float) $request->value > 100
+        ) {
+
+            return back()
+                ->withErrors([
+                    'value' =>
+                        'Percentage discount cannot exceed 100%.'
+                ])
+                ->withInput();
+
+        }
+
+
+        $code =
+            strtoupper(
+                trim($request->code)
+            );
+
+
+        \App\Models\Coupon::create([
+
+            'code' =>
+                $code,
+
+            'type' =>
+                $request->type,
+
+            'value' =>
+                $request->value,
+
+            'minimum_amount' =>
+                $request->minimum_amount,
+
+            'expires_at' =>
+                $request->expires_at ?: null,
+
+            'is_active' =>
+                true,
+
+            'used_count' =>
+                0,
+
+        ]);
+
+
+        return redirect(
+            '/admin/coupons'
+        )->with(
             'success',
             'Coupon "' .
             $code .
             '" created successfully!'
         );
-});
+
+    }
+);
 
 
 /*
@@ -1246,71 +1631,92 @@ Route::post('/admin/coupons', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 
-Route::post('/admin/settings', function (Request $request) {
+Route::post(
+    '/admin/settings',
+    function (Request $request) {
 
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
-    }
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
 
-    $request->validate([
 
-        'upi_id' =>
-            'required|string|max:100',
+        $request->validate([
 
-        'payment_qr' =>
-            'nullable|image|max:5120',
+            'upi_id' =>
+                'required|string|max:100',
 
-    ]);
+            'payment_qr' =>
+                'nullable|image|max:5120',
 
-    $settings =
-        StoreSetting::first();
+        ]);
 
-    if (!$settings) {
+
         $settings =
-            new StoreSetting();
+            StoreSetting::first();
+
+
+        if (!$settings) {
+
+            $settings =
+                new StoreSetting();
+
+        }
+
+
+        $settings->upi_id =
+            $request->upi_id;
+
+
+        if ($request->hasFile('payment_qr')) {
+
+            $qrPath =
+                $request
+                    ->file('payment_qr')
+                    ->getRealPath();
+
+
+            $uploadedQr =
+                (new \Cloudinary\Api\Upload\UploadApi())
+                    ->upload($qrPath);
+
+
+            $settings->payment_qr =
+                $uploadedQr['secure_url'];
+
+        }
+
+
+        $settings->save();
+
+
+        return back()->with(
+            'success',
+            'Payment settings saved successfully!'
+        );
+
     }
+);
 
-    $settings->upi_id =
-        $request->upi_id;
 
-    if ($request->hasFile('payment_qr')) {
+Route::get(
+    '/admin/settings',
+    function () {
 
-        $qrPath =
-            $request
-                ->file('payment_qr')
-                ->getRealPath();
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
 
-        $uploadedQr =
-            (new \Cloudinary\Api\Upload\UploadApi())
-            ->upload($qrPath);
+        $settings =
+            StoreSetting::first();
 
-        $settings->payment_qr =
-            $uploadedQr['secure_url'];
+
+        return view(
+            'admin-settings',
+            compact('settings')
+        );
+
     }
-
-    $settings->save();
-
-    return back()->with(
-        'success',
-        'Payment settings saved successfully!'
-    );
-});
-
-
-Route::get('/admin/settings', function () {
-
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
-    }
-
-    $settings =
-        StoreSetting::first();
-
-    return view(
-        'admin-settings',
-        compact('settings')
-    );
-});
+);
 
 
 /*
@@ -1327,13 +1733,16 @@ Route::delete(
             return redirect('/admin/login');
         }
 
+
         $product->delete();
+
 
         return redirect('/admin')
             ->with(
                 'success',
                 'Product removed successfully!'
             );
+
     }
 );
 
@@ -1344,17 +1753,20 @@ Route::delete(
 |--------------------------------------------------------------------------
 */
 
-Route::post('/admin-user/logout', function (Request $request) {
+Route::post(
+    '/admin-user/logout',
+    function (Request $request) {
 
-    $request->session()->forget(
-        'normal_admin_logged_in'
-    );
+        $request->session()->forget(
+            'normal_admin_logged_in'
+        );
 
-    $request->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
-    return redirect('/');
+        return redirect('/');
 
-});
+    }
+);
 
 
 /*
@@ -1363,15 +1775,18 @@ Route::post('/admin-user/logout', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 
-Route::post('/admin/logout', function () {
+Route::post(
+    '/admin/logout',
+    function () {
 
-    session()->forget(
-        'admin_logged_in'
-    );
+        session()->forget(
+            'admin_logged_in'
+        );
 
-    return redirect('/');
+        return redirect('/');
 
-});
+    }
+);
 
 
 /*
@@ -1380,30 +1795,52 @@ Route::post('/admin/logout', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/check-new-order', function () {
+Route::get(
+    '/admin/check-new-order',
+    function () {
 
-    if (!session('admin_logged_in')) {
+        if (!session('admin_logged_in')) {
 
-        return response()->json([
-            'success' => false
-        ], 403);
-    }
+            return response()->json([
+                'success' => false
+            ], 403);
 
-    $latestOrder =
-        Order::with([
-            'user',
-            'product'
-        ])
-        ->latest('id')
-        ->first();
+        }
 
-    $newOrders =
-        Order::where(
-            'is_read',
-            false
-        )->count();
 
-    if (!$latestOrder) {
+        $latestOrder =
+            Order::with([
+                'user',
+                'product'
+            ])
+            ->latest('id')
+            ->first();
+
+
+        $newOrders =
+            Order::where(
+                'is_read',
+                false
+            )->count();
+
+
+        if (!$latestOrder) {
+
+            return response()->json([
+
+                'success' =>
+                    true,
+
+                'latest_order_id' =>
+                    0,
+
+                'new_orders' =>
+                    $newOrders
+
+            ]);
+
+        }
+
 
         return response()->json([
 
@@ -1411,44 +1848,32 @@ Route::get('/admin/check-new-order', function () {
                 true,
 
             'latest_order_id' =>
-                0,
-
-            'new_orders' =>
-                $newOrders
-
-        ]);
-    }
-
-    return response()->json([
-
-        'success' =>
-            true,
-
-        'latest_order_id' =>
-            $latestOrder->id,
-
-        'new_orders' =>
-            $newOrders,
-
-        'order' => [
-
-            'id' =>
                 $latestOrder->id,
 
-            'customer' =>
-                $latestOrder->user
-                    ? $latestOrder->user->name
-                    : 'Guest',
+            'new_orders' =>
+                $newOrders,
 
-            'total' =>
-                number_format(
-                    $latestOrder->total
-                ),
+            'order' => [
 
-        ],
+                'id' =>
+                    $latestOrder->id,
 
-    ]);
-});
+                'customer' =>
+                    $latestOrder->user
+                        ? $latestOrder->user->name
+                        : 'Guest',
+
+                'total' =>
+                    number_format(
+                        $latestOrder->total
+                    ),
+
+            ],
+
+        ]);
+
+    }
+);
 
 
 /*
@@ -1457,25 +1882,31 @@ Route::get('/admin/check-new-order', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/admin/customer-orders', function () {
+Route::get(
+    '/admin/customer-orders',
+    function () {
 
-    if (!session('admin_logged_in')) {
-        return redirect('/admin/login');
+        if (!session('admin_logged_in')) {
+            return redirect('/admin/login');
+        }
+
+
+        $orders =
+            Order::with([
+                'user',
+                'product'
+            ])
+            ->latest('id')
+            ->get();
+
+
+        return view(
+            'admin-customer-orders',
+            compact('orders')
+        );
+
     }
-
-    $orders =
-        Order::with([
-            'user',
-            'product'
-        ])
-        ->latest('id')
-        ->get();
-
-    return view(
-        'admin-customer-orders',
-        compact('orders')
-    );
-});
+);
 
 
 /*
@@ -1484,40 +1915,61 @@ Route::get('/admin/customer-orders', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/cart', [
-    CartController::class,
-    'index'
-]);
+Route::get(
+    '/cart',
+    [
+        CartController::class,
+        'index'
+    ]
+);
 
-Route::post('/cart/add/{product}', [
-    CartController::class,
-    'add'
-]);
+Route::post(
+    '/cart/add/{product}',
+    [
+        CartController::class,
+        'add'
+    ]
+);
 
-Route::post('/cart/remove/{id}', [
-    CartController::class,
-    'remove'
-]);
+Route::post(
+    '/cart/remove/{id}',
+    [
+        CartController::class,
+        'remove'
+    ]
+);
 
-Route::post('/cart/update/{id}', [
-    CartController::class,
-    'update'
-]);
+Route::post(
+    '/cart/update/{id}',
+    [
+        CartController::class,
+        'update'
+    ]
+);
 
-Route::post('/cart/apply-coupon', [
-    CartController::class,
-    'applyCoupon'
-]);
+Route::post(
+    '/cart/apply-coupon',
+    [
+        CartController::class,
+        'applyCoupon'
+    ]
+);
 
-Route::post('/cart/remove-coupon', [
-    CartController::class,
-    'removeCoupon'
-]);
+Route::post(
+    '/cart/remove-coupon',
+    [
+        CartController::class,
+        'removeCoupon'
+    ]
+);
 
-Route::post('/cart/checkout', [
-    CartController::class,
-    'checkout'
-]);
+Route::post(
+    '/cart/checkout',
+    [
+        CartController::class,
+        'checkout'
+    ]
+);
 
 
 /*
@@ -1533,48 +1985,137 @@ Route::get('/signup', function () {
 });
 
 
-Route::post('/signup', function (Request $request) {
+Route::post(
+    '/signup',
+    function (Request $request) {
 
-    $request->validate([
-
-        'name' =>
-            'required',
-
-        'email' =>
-            'required|email|unique:users,email',
-
-        'password' =>
-            'required|min:6|confirmed',
-
-    ]);
-
-    $user =
-        User::create([
+        $request->validate([
 
             'name' =>
-                $request->name,
+                'required',
 
             'email' =>
-                $request->email,
+                'required|email|unique:users,email',
 
             'password' =>
-                Hash::make(
-                    $request->password
-                ),
+                'required|min:6|confirmed',
 
         ]);
 
-    Auth::login($user);
 
-    return redirect('/')
-        ->with(
-            'welcome',
-            'Welcome, ' .
-            $user->name .
-            '!'
-        );
+        $user =
+            User::create([
 
-});
+                'name' =>
+                    $request->name,
+
+                'email' =>
+                    $request->email,
+
+                'password' =>
+                    Hash::make(
+                        $request->password
+                    ),
+
+            ]);
+
+
+        Auth::login($user);
+
+
+        return redirect('/')
+            ->with(
+                'welcome',
+                'Welcome, ' .
+                $user->name .
+                '!'
+            );
+
+    }
+);
+
+/*
+|--------------------------------------------------------------------------
+| CUSTOMER SUPPORT NOTIFICATION CHECK
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/customer-support/check-notifications',
+    function () {
+
+        if (!auth()->check()) {
+
+            return response()->json([
+                'success' => false,
+            ]);
+
+        }
+
+        $message = \App\Models\SupportMessage::where(
+            'user_id',
+            auth()->id()
+        )
+        ->where(
+            'sender_type',
+            'admin'
+        )
+        ->where(
+            'is_read',
+            false
+        )
+        ->latest()
+        ->first();
+
+        $count = \App\Models\SupportMessage::where(
+            'user_id',
+            auth()->id()
+        )
+        ->where(
+            'sender_type',
+            'admin'
+        )
+        ->where(
+            'is_read',
+            false
+        )
+        ->count();
+
+        return response()->json([
+
+            'success' => true,
+
+            'count' => $count,
+
+            'message' => $message ? [
+
+                'id' =>
+                    $message->id,
+
+                'text' =>
+                    $message->message,
+
+            ] : null,
+
+        ]);
+
+    }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN SUPPORT NOTIFICATION CHECK
+|--------------------------------------------------------------------------
+*/
+
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN CUSTOMER MESSAGE NOTIFICATION
+|--------------------------------------------------------------------------
+*/
+
 
 
 /*
@@ -1583,66 +2124,81 @@ Route::post('/signup', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/login', function () {
+Route::get(
+    '/login',
+    function () {
 
-    return view('login');
+        return view('login');
 
-})->name('login');
+    }
+)->name('login');
 
 
-Route::post('/login', function (Request $request) {
+Route::post(
+    '/login',
+    function (Request $request) {
 
-    $credentials =
-        $request->validate([
+        $credentials =
+            $request->validate([
 
-            'email' =>
-                'required|email',
+                'email' =>
+                    'required|email',
 
-            'password' =>
-                'required',
+                'password' =>
+                    'required',
 
-        ]);
+            ]);
 
-    if (Auth::attempt($credentials)) {
 
-        $request
-            ->session()
-            ->regenerate();
+        if (Auth::attempt($credentials)) {
 
-        $user =
-            Auth::user();
+            $request
+                ->session()
+                ->regenerate();
 
-        if (
-            session('checkout_after_login')
-        ) {
 
-            session()->forget(
-                'checkout_after_login'
-            );
+            $user =
+                Auth::user();
 
-            return redirect('/cart')
-                ->with(
-                    'success',
-                    'Login successful! You can now place your order.'
+
+            if (
+                session('checkout_after_login')
+            ) {
+
+                session()->forget(
+                    'checkout_after_login'
                 );
+
+
+                return redirect('/cart')
+                    ->with(
+                        'success',
+                        'Login successful! You can now place an order.'
+                    );
+
+            }
+
+
+            return redirect('/')
+                ->with(
+                    'welcome',
+                    'Welcome back, ' .
+                    $user->name .
+                    '!'
+                );
+
         }
 
-        return redirect('/')
-            ->with(
-                'welcome',
-                'Welcome back, ' .
-                $user->name .
-                '!'
-            );
-    }
 
-    return back()
-        ->withErrors([
-            'email' =>
-                'The email or password is incorrect.',
-        ])
-        ->withInput();
-});
+        return back()
+            ->withErrors([
+                'email' =>
+                    'The email or password is incorrect.',
+            ])
+            ->withInput();
+
+    }
+);
 
 
 /*
@@ -1651,114 +2207,150 @@ Route::post('/login', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/my-orders', function () {
+Route::get(
+    '/my-orders',
+    function () {
 
-    if (!auth()->check()) {
+        if (!auth()->check()) {
 
-        return redirect('/login')
-            ->with(
-                'error',
-                'Please login to view your orders.'
-            );
+            return redirect('/login')
+                ->with(
+                    'error',
+                    'Please login to view your orders.'
+                );
+
+        }
+
+
+        $orders =
+            Order::with('product')
+                ->where(
+                    'user_id',
+                    auth()->id()
+                )
+                ->latest()
+                ->get();
+
+
+        return view(
+            'my-orders',
+            compact('orders')
+        );
+
     }
+)->name('my.orders');
 
-    $orders =
-        Order::with('product')
-            ->where(
+
+/*
+|--------------------------------------------------------------------------
+| CUSTOMER ORDER NOTIFICATIONS
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/customer/notifications',
+    function () {
+
+        if (!auth()->check()) {
+
+            return response()->json([
+                'notifications' => []
+            ]);
+
+        }
+
+
+        $notifications =
+            OrderNotification::where(
                 'user_id',
                 auth()->id()
+            )
+            ->where(
+                'is_read',
+                false
             )
             ->latest()
             ->get();
 
-    return view(
-        'my-orders',
-        compact('orders')
-    );
-
-})->name('my.orders');
-
-Route::get('/customer/notifications', function () {
-
-    if (!auth()->check()) {
-        return response()->json([
-            'notifications' => []
-        ]);
-    }
-
-    $notifications = OrderNotification::where(
-        'user_id',
-        auth()->id()
-    )
-    ->where(
-        'is_read',
-        false
-    )
-    ->latest()
-    ->get();
-
-    return response()->json([
-        'notifications' => $notifications
-    ]);
-
-});
-
-Route::get('/admin/check-order-status-update', function () {
-
-    if (!session('admin_logged_in')) {
 
         return response()->json([
-            'success' => false
-        ], 403);
-
-    }
-
-
-    $notification = \App\Models\OrderNotification::with([
-        'order.user'
-    ])
-    ->latest()
-    ->first();
-
-
-    if (!$notification) {
-
-        return response()->json([
-            'success' => true,
-            'notification' => null
+            'notifications' =>
+                $notifications
         ]);
 
     }
+);
 
 
-    return response()->json([
+/*
+|--------------------------------------------------------------------------
+| ADMIN ORDER STATUS NOTIFICATION CHECK
+|--------------------------------------------------------------------------
+*/
 
-        'success' => true,
+Route::get(
+    '/admin/check-order-status-update',
+    function () {
 
-        'notification' => [
+        if (!session('admin_logged_in')) {
 
-            'id' =>
-                $notification->id,
+            return response()->json([
+                'success' => false
+            ], 403);
+        }
 
-            'order_id' =>
-                $notification->order_id,
 
-            'status' =>
-                $notification->status,
+        $notification =
+            \App\Models\OrderNotification::with([
+                'order.user'
+            ])
+            ->latest()
+            ->first();
 
-            'title' =>
-                $notification->title,
 
-            'message' =>
-                $notification->message,
+        if (!$notification) {
 
-            'customer' =>
-                optional(
-                    $notification->order->user
-                )->name ?? 'Customer',
+            return response()->json([
+                'success' =>
+                    true,
 
-        ],
+                'notification' =>
+                    null
+            ]);
 
-    ]);
+        }
 
-});
+
+        return response()->json([
+
+            'success' =>
+                true,
+
+            'notification' => [
+
+                'id' =>
+                    $notification->id,
+
+                'order_id' =>
+                    $notification->order_id,
+
+                'status' =>
+                    $notification->status,
+
+                'title' =>
+                    $notification->title,
+
+                'message' =>
+                    $notification->message,
+
+                'customer' =>
+                    optional(
+                        $notification->order->user
+                    )->name ?? 'Customer',
+
+            ],
+
+        ]);
+
+    }
+);

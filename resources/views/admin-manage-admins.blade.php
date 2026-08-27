@@ -22,24 +22,23 @@
     >
 
     <style>
+
         body {
-            margin: 0;
-            background: #f7f9fc;
+            background: #f5f7fb;
+            color: #1f2937;
             font-family: Arial, sans-serif;
-            color: #111827;
         }
 
         .navbar {
-            background: #ffffff;
+            background: white;
             border-bottom: 1px solid #e5e7eb;
-            padding: 18px 0;
         }
 
         .brand {
-            font-size: 25px;
-            font-weight: 800;
-            text-decoration: none;
             color: #111827;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
         }
 
         .brand span {
@@ -47,153 +46,247 @@
         }
 
         .admin-label {
-            margin-left: 10px;
-            padding: 5px 10px;
+            margin-left: 8px;
+            padding: 5px 9px;
             border-radius: 20px;
-            background: #2563eb;
-            color: white;
+            background: #eff6ff;
+            color: #2563eb;
             font-size: 10px;
-            font-weight: 700;
+            font-weight: bold;
         }
 
         .dashboard-btn {
+            padding: 8px 14px;
             border: 1px solid #d1d5db;
-            color: #374151;
+            border-radius: 8px;
             background: white;
-            border-radius: 9px;
-            padding: 9px 16px;
+            color: #374151;
             text-decoration: none;
-            font-weight: 600;
+            font-size: 13px;
         }
 
         .dashboard-btn:hover {
             background: #2563eb;
             color: white;
-            border-color: #2563eb;
         }
 
         .page-wrapper {
             max-width: 1150px;
-            margin: 45px auto;
-            padding: 0 20px;
+            margin: 40px auto;
+            padding: 0 15px;
         }
 
         .page-title {
-            font-size: 32px;
-            font-weight: 800;
             margin-bottom: 5px;
+            font-size: 32px;
+            font-weight: bold;
         }
 
         .page-subtitle {
+            margin-bottom: 25px;
             color: #6b7280;
-            margin-bottom: 30px;
         }
 
         .card-box {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 18px;
-            padding: 28px;
             margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(15, 23, 42, .04);
+            padding: 25px;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,.05);
         }
 
         .card-title {
-            font-size: 20px;
-            font-weight: 700;
             margin-bottom: 20px;
+            color: #111827;
+            font-size: 19px;
+            font-weight: bold;
         }
 
         .form-label {
+            margin-bottom: 7px;
             font-weight: 600;
         }
 
         .form-control {
-            padding: 12px;
-            border-radius: 10px;
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            color: #6b7280;
+        }
+
+        .input-hint {
+            margin-top: 5px;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        .permissions-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .permissions-count {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .permissions-count strong {
+            color: #2563eb;
+        }
+
+        .permission-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .permission-action {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            background: white;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .permission-action:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .permissions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
 
         .permission-box {
             border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 15px 18px;
-            margin-bottom: 10px;
-            transition: .2s;
+            border-radius: 10px;
+            background: white;
         }
 
         .permission-box:hover {
-            border-color: #2563eb;
-            background: #f8fbff;
+            border-color: #93c5fd;
         }
 
-        .permission-box label {
+        .permission-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px;
             cursor: pointer;
-            width: 100%;
+        }
+
+        .permission-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #2563eb;
+        }
+
+        .permission-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #2563eb;
         }
 
         .permission-title {
-            font-weight: 700;
+            display: block;
+            font-weight: bold;
+            font-size: 13px;
         }
 
         .permission-description {
             display: block;
-            color: #6b7280;
-            font-size: 13px;
             margin-top: 3px;
+            color: #6b7280;
+            font-size: 11px;
         }
 
         .create-btn {
+            padding: 10px 18px;
+            border: 0;
+            border-radius: 8px;
             background: #2563eb;
             color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 12px 22px;
-            font-weight: 700;
+            font-weight: bold;
         }
 
         .create-btn:hover {
             background: #1d4ed8;
-            color: white;
+        }
+
+        .admin-table {
+            margin-bottom: 0;
         }
 
         .admin-table th {
+            background: #f9fafb;
             color: #6b7280;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: .8px;
         }
 
-        .admin-table td {
+        .admin-table td,
+        .admin-table th {
+            padding: 14px;
             vertical-align: middle;
         }
 
         .permission-badge {
             display: inline-block;
+            margin: 2px;
+            padding: 5px 8px;
+            border-radius: 15px;
             background: #eff6ff;
             color: #2563eb;
-            border-radius: 20px;
-            padding: 5px 9px;
-            font-size: 11px;
-            font-weight: 700;
-            margin: 2px;
+            font-size: 10px;
+            font-weight: bold;
         }
 
         .action-buttons {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            padding: 7px 10px;
+            border-radius: 7px;
+            font-size: 11px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         .edit-btn {
+            border: 1px solid #bfdbfe;
             background: #eff6ff;
             color: #2563eb;
-            border: 1px solid #bfdbfe;
-            border-radius: 8px;
-            padding: 7px 12px;
-            font-size: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-block;
         }
 
         .edit-btn:hover {
@@ -202,19 +295,51 @@
         }
 
         .delete-btn {
-            background: #fff1f2;
+            border: 1px solid #fecaca;
+            background: #fef2f2;
             color: #dc2626;
-            border: 1px solid #fecdd3;
-            border-radius: 8px;
-            padding: 7px 12px;
-            font-size: 12px;
-            font-weight: 700;
         }
 
         .delete-btn:hover {
             background: #dc2626;
             color: white;
         }
+
+        @media (max-width: 768px) {
+
+            .permissions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .permissions-toolbar {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .page-title {
+                font-size: 27px;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .dashboard-btn {
+                font-size: 0;
+            }
+
+            .dashboard-btn::before {
+                content: "←";
+                font-size: 18px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+        }
+
     </style>
 
 </head>
@@ -325,26 +450,115 @@
             </div>
 
 
-            <div class="mb-4">
+            <div class="row g-3">
 
-                <label class="form-label">
-                    Password
-                </label>
+                <div class="col-lg-6">
 
-                <input
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    placeholder="Create admin password"
-                    required
-                >
+                    <label class="form-label" for="adminPassword">
+                        Password
+                    </label>
+
+                    <div class="password-wrap">
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="adminPassword"
+                            class="form-control"
+                            placeholder="Create admin password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('adminPassword', this)"
+                            aria-label="Show password"
+                        >
+                            <i class="bi bi-eye"></i>
+                        </button>
+
+                    </div>
+
+                    <div class="input-hint">
+                        Minimum 6 characters.
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6">
+
+                    <label class="form-label" for="adminPasswordConfirmation">
+                        Confirm Password
+                    </label>
+
+                    <div class="password-wrap">
+
+                        <input
+                            type="password"
+                            name="password_confirmation"
+                            id="adminPasswordConfirmation"
+                            class="form-control"
+                            placeholder="Confirm admin password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('adminPasswordConfirmation', this)"
+                            aria-label="Show password"
+                        >
+                            <i class="bi bi-eye"></i>
+                        </button>
+
+                    </div>
+
+                </div>
 
             </div>
 
 
-            <label class="form-label mb-3">
-                Admin Permissions
-            </label>
+            <div class="permissions-toolbar">
+
+                <div>
+
+                    <label class="form-label mb-1">
+                        Admin Permissions
+                    </label>
+
+                    <div class="permissions-count">
+                        <strong id="permissionCount">0</strong>
+                        of <strong>10</strong> permissions selected
+                    </div>
+
+                </div>
+
+                <div class="permission-actions">
+
+                    <button
+                        type="button"
+                        class="permission-action"
+                        id="selectAllPermissions"
+                    >
+                        <i class="bi bi-check2-all me-1"></i>
+                        Select All
+                    </button>
+
+                    <button
+                        type="button"
+                        class="permission-action"
+                        id="clearAllPermissions"
+                    >
+                        <i class="bi bi-x-lg me-1"></i>
+                        Clear All
+                    </button>
+
+                </div>
+
+            </div>
 
 
             @php
@@ -397,17 +611,21 @@
 
                 <div class="permission-box">
 
-                    <label class="d-flex align-items-start gap-3">
+                    <label class="permission-label">
 
                         <input
                             type="checkbox"
                             name="permissions[]"
                             value="{{ $value }}"
-                            class="form-check-input mt-1"
+                            class="permission-checkbox permission-input"
                             @checked(in_array($value, old('permissions', [])))
                         >
 
-                        <span>
+                        <span class="permission-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </span>
+
+                        <span class="permission-content">
 
                             <span class="permission-title">
                                 {{ $permission['title'] }}
@@ -589,7 +807,7 @@
                                     <form
                                         action="{{ url('/admin/manage-admins/' . $admin->id) }}"
                                         method="POST"
-                                        onsubmit="return confirm('Delete this admin?');"
+                                        onsubmit="return confirm('Are you sure you want to delete this admin?');"
                                     >
 
                                         @csrf
@@ -600,11 +818,8 @@
                                             type="submit"
                                             class="delete-btn"
                                         >
-
                                             <i class="bi bi-trash3 me-1"></i>
-
                                             Delete
-
                                         </button>
 
                                     </form>
@@ -642,6 +857,125 @@
 
 </div>
 
-</body>
 
-</html>
+<script>
+
+    const permissionInputs =
+        document.querySelectorAll('.permission-input');
+
+    const permissionCount =
+        document.getElementById('permissionCount');
+
+
+    function updatePermissionCount() {
+
+        const selected =
+            document.querySelectorAll(
+                '.permission-input:checked'
+            ).length;
+
+        if (permissionCount) {
+            permissionCount.textContent = selected;
+        }
+    }
+
+
+    permissionInputs.forEach(function (input) {
+
+        input.addEventListener(
+            'change',
+            updatePermissionCount
+        );
+
+    });
+
+
+    const selectAll =
+        document.getElementById(
+            'selectAllPermissions'
+        );
+
+    if (selectAll) {
+
+        selectAll.addEventListener(
+            'click',
+            function () {
+
+                permissionInputs.forEach(
+                    function (input) {
+                        input.checked = true;
+                    }
+                );
+
+                updatePermissionCount();
+
+            }
+        );
+
+    }
+
+
+    const clearAll =
+        document.getElementById(
+            'clearAllPermissions'
+        );
+
+    if (clearAll) {
+
+        clearAll.addEventListener(
+            'click',
+            function () {
+
+                permissionInputs.forEach(
+                    function (input) {
+                        input.checked = false;
+                    }
+                );
+
+                updatePermissionCount();
+
+            }
+        );
+
+    }
+
+
+    function togglePassword(
+        inputId,
+        button
+    ) {
+
+        const input =
+            document.getElementById(inputId);
+
+        if (!input) {
+            return;
+        }
+
+        const icon =
+            button.querySelector('i');
+
+        if (input.type === 'password') {
+
+            input.type = 'text';
+
+            icon.className =
+                'bi bi-eye-slash';
+
+        } else {
+
+            input.type = 'password';
+
+            icon.className =
+                'bi bi-eye';
+
+        }
+
+    }
+
+
+    updatePermissionCount();
+
+</script>
+
+</body>
